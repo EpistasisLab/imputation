@@ -135,7 +135,7 @@ if __name__ == "__main__":
     parser.add_argument("--file_name", type=str, help="name of file")
     parser.add_argument("--spike_in", type=str, default="MCAR",
                         help='spike in method: MCAR, NMAR @TODO others')
-    parser.add_argument("--missing_rate", help="list of missing values",
+    parser.add_argument("--spike_rate", help="list of missing values",
                         type=float, nargs="*")
     parser.add_argument("--trials", help="list of missing values",
                         type=int, default=1)
