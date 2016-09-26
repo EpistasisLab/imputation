@@ -37,4 +37,10 @@ Arguments:
 * --eval_methods - 
 	* mse - mean squared error
 	* ae - absolute error 
-	* @TODO
+	* mape - mean absolute percentage error
+
+
+@TODO
+
+* Parameter Sweep
+* Better handle parameters as input to imputers 
