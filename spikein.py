@@ -6,6 +6,6 @@ class MCAR():
         # @TODO there is definitely a more efficient way to do this
         for idx, row in enumerate(X):
             indices = np.random.random_integers(0, len(row) - 1,
-                                                len(row) * rate)
+                                                int(len(row) * rate))
             X[idx][indices] = np.nan
         return X
