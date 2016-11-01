@@ -37,24 +37,24 @@ def run(run_name='test', file_name='gaussian.pkl', spike_in='MCAR',
             X_corrupt = spiker.spikein(X.copy(), m)
 
             scores = {}
-            # X_simple_mean = SimpleFill(fill_method='mean').complete(X_corrupt)
-            # scores['simple_mean'] = evaluate(X, X_simple_mean)
+            X_simple_mean = SimpleFill(fill_method='mean').complete(X_corrupt)
+            scores['simple_mean'] = evaluate(X, X_simple_mean)
 
-            # X_simple_median = (SimpleFill(fill_method='median')
-            #                    .complete(X_corrupt))
-            # scores['simple_median'] = evaluate(X, X_simple_median)
+            X_simple_median = (SimpleFill(fill_method='median')
+                               .complete(X_corrupt))
+            scores['simple_median'] = evaluate(X, X_simple_median)
 
-            # X_ae_1 = AutoEncoder(hidden_layer_sizes=[150],
-            #                      max_training_epochs=500).complete(X_corrupt)
-            # scores['AE_1'] = evaluate(X, X_ae_1)
+            X_ae_1 = AutoEncoder(hidden_layer_sizes=[150],
+                                 max_training_epochs=500).complete(X_corrupt)
+            scores['AE_1'] = evaluate(X, X_ae_1)
 
-            # X_ae_2 = AutoEncoder(hidden_layer_sizes=[150, 150],
-            #                      max_training_epochs=500).complete(X_corrupt)
-            # scores['AE_2'] = evaluate(X, X_ae_1)
+            X_ae_2 = AutoEncoder(hidden_layer_sizes=[150, 150],
+                                 max_training_epochs=500).complete(X_corrupt)
+            scores['AE_2'] = evaluate(X, X_ae_1)
             
-            # X_ae_3 = AutoEncoder(hidden_layer_sizes=[150, 150, 150],
-            #                      max_training_epochs=500).complete(X_corrupt)
-            # scores['AE_3'] = evaluate(X, X_ae_1)
+            X_ae_3 = AutoEncoder(hidden_layer_sizes=[150, 150, 150],
+                                 max_training_epochs=500).complete(X_corrupt)
+            scores['AE_3'] = evaluate(X, X_ae_1)
 
 
             # # # X_MICE_2 = MICE(n_nearest_columns=80, n_imputations=100,
@@ -63,15 +63,15 @@ def run(run_name='test', file_name='gaussian.pkl', spike_in='MCAR',
             # # #                 init_fill_method="mean").complete(X_corrupt)
             # # # print('X_MICE', evaluate(X, X_MICE))
 
-            # X_filled_svd_10 = IterativeSVD(rank=10).complete(X_corrupt)
-            # scores['svd_10'] = evaluate(X, X_filled_svd_10)
-            # X_filled_svd_20 = IterativeSVD(rank=20).complete(X_corrupt)
-            # scores['svd_20'] = evaluate(X, X_filled_svd_20)
-            # X_filled_svd_40 = IterativeSVD(rank=40).complete(X_corrupt)
-            # scores['svd_40'] = evaluate(X, X_filled_svd_40)
+            X_filled_svd_10 = IterativeSVD(rank=10).complete(X_corrupt)
+            scores['svd_10'] = evaluate(X, X_filled_svd_10)
+            X_filled_svd_20 = IterativeSVD(rank=20).complete(X_corrupt)
+            scores['svd_20'] = evaluate(X, X_filled_svd_20)
+            X_filled_svd_40 = IterativeSVD(rank=40).complete(X_corrupt)
+            scores['svd_40'] = evaluate(X, X_filled_svd_40)
 
-            # X_filled_si = SoftImpute().complete(X_corrupt)
-            # scores['si'] = evaluate(X, X_filled_si)
+            X_filled_si = SoftImpute().complete(X_corrupt)
+            scores['si'] = evaluate(X, X_filled_si)
 
             X_filled_knn1 = KNN(k=1).complete(X_corrupt)
             scores['knn1'] = evaluate(X, X_filled_knn1)
@@ -91,7 +91,7 @@ def run(run_name='test', file_name='gaussian.pkl', spike_in='MCAR',
             # X_filled_nnm = NuclearNormMinimization().complete(X_corrupt)
             # print('nnm', evaluate(X, X_filled_nnm))
 
-    save_results(run_name, file_name, spike_in, missing, trials, full_scores)
+    save_results(run_name, file_name, spike_in, spike_in, trials, full_scores)
 
 
 def save_results(run_name, file_name, spike_in, missing, trials, full_scores):
