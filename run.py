@@ -15,7 +15,7 @@ from fancyimpute import (SimpleFill, KNN, SoftImpute, IterativeSVD,
 
 
 def run(run_name='test', file_name='gaussian.pkl', spike_in='MCAR',
-        spike_rate=[0.1, 0.2, 0.3, 0.4, 0.5], trials=1):
+        spike_rate=[0.1, 0.2, 0.3, 0.4, 0.5], trials=1, samples=None):
     print('Run ' + file_name + ' for ' + str(trials) + ' trials with ' +
           spike_in + ' and ' + str(spike_rate) + ' spike rate')
     random_seed = 123
@@ -23,8 +23,9 @@ def run(run_name='test', file_name='gaussian.pkl', spike_in='MCAR',
 
     # load file
     dataset = load_file(file_name)
-    X = dataset
-    
+    if samples:
+        X = dataset[:samples]
+
     # for non-simulated data may need to normalize/scale
     full_scores = {}
     for m in spike_rate:
@@ -38,7 +39,7 @@ def run(run_name='test', file_name='gaussian.pkl', spike_in='MCAR',
             scores = {}
             # X_simple_mean = SimpleFill(fill_method='mean').complete(X_corrupt)
             # scores['simple_mean'] = evaluate(X, X_simple_mean)
-            
+
             # X_simple_median = (SimpleFill(fill_method='median')
             #                    .complete(X_corrupt))
             # scores['simple_median'] = evaluate(X, X_simple_median)
@@ -138,7 +139,6 @@ def evaluate(X, X_imputed, method='mse'):
         X_imputed = np.nan_to_num(X_imputed)
         mse = ((X - X_imputed) ** 2).mean(axis=None)
         return mse
-        
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -152,6 +152,7 @@ if __name__ == "__main__":
     parser.add_argument("--trials", help="list of missing values",
                         type=int, default=1)
     parser.add_argument("--eval_method", type=str, default="mse")
+    parser.add_argument("--samples", type=int, default=None)
     # @TODO specify imputation strategies
 
     args = parser.parse_args()
@@ -166,4 +167,4 @@ if __name__ == "__main__":
         args.trials = int(args.trials)
 
     run(args.name, args.file_name, args.spike_in,
-        args.spike_rate, args.trials)
+        args.spike_rate, args.trials, args.samples)
