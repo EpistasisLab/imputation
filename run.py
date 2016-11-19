@@ -42,19 +42,7 @@ def run(run_name='test', file_name='gaussian.pkl', spike_in='MCAR',
 
             X_simple_median = (SimpleFill(fill_method='median')
                                .complete(X_corrupt))
-            scores['simple_median'] = evaluate(X, X_simple_median)
-
-            X_ae_1 = AutoEncoder(hidden_layer_sizes=[150],
-                                 max_training_epochs=500).complete(X_corrupt)
-            scores['AE_1'] = evaluate(X, X_ae_1)
-
-            X_ae_2 = AutoEncoder(hidden_layer_sizes=[150, 150],
-                                 max_training_epochs=500).complete(X_corrupt)
-            scores['AE_2'] = evaluate(X, X_ae_1)
-            
-            X_ae_3 = AutoEncoder(hidden_layer_sizes=[150, 150, 150],
-                                 max_training_epochs=500).complete(X_corrupt)
-            scores['AE_3'] = evaluate(X, X_ae_1)
+            scores['simple_median'] = evaluate(X, X_simple_median)     
 
 
             # # # X_MICE_2 = MICE(n_nearest_columns=80, n_imputations=100,
@@ -63,29 +51,45 @@ def run(run_name='test', file_name='gaussian.pkl', spike_in='MCAR',
             # # #                 init_fill_method="mean").complete(X_corrupt)
             # # # print('X_MICE', evaluate(X, X_MICE))
 
-            X_filled_svd_10 = IterativeSVD(rank=10).complete(X_corrupt)
-            scores['svd_10'] = evaluate(X, X_filled_svd_10)
-            X_filled_svd_20 = IterativeSVD(rank=20).complete(X_corrupt)
-            scores['svd_20'] = evaluate(X, X_filled_svd_20)
+            #X_filled_svd_10 = IterativeSVD(rank=10).complete(X_corrupt)
+            #scores['svd_10'] = evaluate(X, X_filled_svd_10)
+            #X_filled_svd_20 = IterativeSVD(rank=20).complete(X_corrupt)
+            #scores['svd_20'] = evaluate(X, X_filled_svd_20)
             X_filled_svd_40 = IterativeSVD(rank=40).complete(X_corrupt)
             scores['svd_40'] = evaluate(X, X_filled_svd_40)
+            X_filled_svd_80 = IterativeSVD(rank=80).complete(X_corrupt)
+            scores['svd_80'] = evaluate(X, X_filled_svd_80)
+            X_filled_svd_120 = IterativeSVD(rank=120).complete(X_corrupt)
+            scores['svd_120'] = evaluate(X, X_filled_svd_120)
+            X_filled_svd_146 = IterativeSVD(rank=146).complete(X_corrupt)
+            scores['svd_146'] = evaluate(X, X_filled_svd_146)
 
             X_filled_si = SoftImpute().complete(X_corrupt)
             scores['si'] = evaluate(X, X_filled_si)
 
-            X_filled_knn1 = KNN(k=1).complete(X_corrupt)
-            scores['knn1'] = evaluate(X, X_filled_knn1)
-            X_filled_knn3 = KNN(k=3).complete(X_corrupt)
-            scores['knn3'] = evaluate(X, X_filled_knn3)
-            X_filled_knn5 = KNN(k=5).complete(X_corrupt)
-            scores['knn5'] = evaluate(X, X_filled_knn5)
-            X_filled_knn7 = KNN(k=7).complete(X_corrupt)
-            scores['knn7'] = evaluate(X, X_filled_knn7)
+            #X_filled_knn1 = KNN(k=1).complete(X_corrupt)
+            #scores['knn1'] = evaluate(X, X_filled_knn1)
+            #X_filled_knn3 = KNN(k=3).complete(X_corrupt)
+            #scores['knn3'] = evaluate(X, X_filled_knn3)
+            #X_filled_knn5 = KNN(k=5).complete(X_corrupt)
+            #scores['knn5'] = evaluate(X, X_filled_knn5)
+            #X_filled_knn7 = KNN(k=7).complete(X_corrupt)
+            #scores['knn7'] = evaluate(X, X_filled_knn7)
             X_filled_knn15 = KNN(k=15).complete(X_corrupt)
             scores['knn15'] = evaluate(X, X_filled_knn15)
 
+            X_filled_knn30 = KNN(k=30).complete(X_corrupt)
+            scores['knn30'] = evaluate(X, X_filled_knn15)
+
             print(json.dumps(scores, indent=4))
             full_scores[str(m) + '_' + str(t)] = scores
+
+            trial_name = run_name + str(t)
+            save_results(trial_name, file_name, spike_in, spike_in, trials, full_scores)
+
+            X_ae_3 = AutoEncoder(dropout_probability=0.2,
+								 hidden_layer_sizes=[150, 150, 150]).complete(X_corrupt)
+            scores['AE_3'] = evaluate(X, X_ae_1)
 
             # excluded for speed for now
             # X_filled_nnm = NuclearNormMinimization().complete(X_corrupt)
