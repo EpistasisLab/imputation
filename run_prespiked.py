@@ -16,6 +16,9 @@ def run(name, patients, run_all, save_imputed):
     X_corrupt = load_file(name + 'SpikeIn')[:patients]
     X = load_file(name)[:patients]
 
+    np.savetxt('./output/sweeps/' + name + '_input.csv',
+               X, delimiter=',', newline='\n')
+
     scores = {'simple_mean': [], 'simple_median': [], 'svd_4': [],
               'svd_8': [], 'svd_16': [], 'svd_24': [], 'si': [],
               'knn_1': [], 'knn_3': [], 'knn_9': [], 'knn_15': [],
@@ -25,7 +28,6 @@ def run(name, patients, run_all, save_imputed):
         scores['MICE'] = []
         scores['MatrixFactor'] = []
         scores['NuclearMin'] = []
-        scores['BiScaler'] = []
 
     # range 1 if only 1 spike in
     for i in range(1):
@@ -52,69 +54,64 @@ def run(name, patients, run_all, save_imputed):
         si_X = SoftImpute().complete(X_corrupt)
         scores['si'].append(evaluate(si_X, X))
 
-        knn_1_X = KNN(k=1).complete(X_corrupt)
-        scores['knn_1'].append(evaluate(knn_1_X, X))
-
-        knn_3_X = KNN(k=3).complete(X_corrupt)
-        scores['knn_3'].append(evaluate(knn_3_X, X))
-
-        knn_9_X = KNN(k=9).complete(X_corrupt)
-        scores['knn_9'].append(evaluate(knn_9_X, X))
-
-        knn_15_X = KNN(k=15).complete(X_corrupt)
-        scores['knn_15'].append(evaluate(knn_15_X, X))
-
-        knn_30_X = KNN(k=30).complete(X_corrupt)
-        scores['knn_30'].append(evaluate(knn_30_X, X))
-
         if save_imputed:
-            np.savetxt('./output/sweeps' + name + '_simple_mean.csv',
+            np.savetxt('./output/sweeps/' + name + '_simple_mean.csv',
                        simple_mean_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps' + name + '_simple_median.csv',
+            np.savetxt('./output/sweeps/' + name + '_simple_median.csv',
                        simple_median_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps' + name + '_svd_4.csv',
+            np.savetxt('./output/sweeps/' + name + '_svd_4.csv',
                        svd_4_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps' + name + '_svd_8.csv',
+            np.savetxt('./output/sweeps/' + name + '_svd_8.csv',
                        svd_8_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps' + name + '_svd_16.csv',
+            np.savetxt('./output/sweeps/' + name + '_svd_16.csv',
                        svd_16_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps' + name + '_svd_24.csv',
+            np.savetxt('./output/sweeps/' + name + '_svd_24.csv',
                        svd_24_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps' + name + '_si_4.csv',
+            np.savetxt('./output/sweeps/' + name + '_si_4.csv',
                        si_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps' + name + '_knn_1.csv',
-                       knn_1_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps' + name + '_knn_3.csv',
-                       knn_3_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps' + name + '_knn_9.csv',
-                       knn_9_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps' + name + '_knn_15.csv',
-                       knn_15_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps' + name + '_knn_30.csv',
-                       knn_30_X, delimiter=',', newline='\n')
 
         if run_all:
             mice_X = MICE().complete(X_corrupt)
             scores['MICE'].append(evaluate(mice_X, X))
 
             matrix_fact_X = MatrixFactorization().complete(X_corrupt)
-            scores['MatrixFact'].append(evaluate(matrix_fact_X, X))
+            scores['MatrixFactor'].append(evaluate(matrix_fact_X, X))
 
             nnm_X = NuclearNormMinimization().complete(X_corrupt)
             scores['NuclearMin'].append(evaluate(nnm_X, X))
 
-            biscaler_X = BiScaler().complete(X_corrupt)
-            scores['biscaler'].append(evaluate(biscaler_X, X))
+            knn_1_X = KNN(k=1).complete(X_corrupt)
+            scores['knn_1'].append(evaluate(knn_1_X, X))
+
+            knn_3_X = KNN(k=3).complete(X_corrupt)
+            scores['knn_3'].append(evaluate(knn_3_X, X))
+
+            knn_9_X = KNN(k=9).complete(X_corrupt)
+            scores['knn_9'].append(evaluate(knn_9_X, X))
+
+            knn_15_X = KNN(k=15).complete(X_corrupt)
+            scores['knn_15'].append(evaluate(knn_15_X, X))
+
+            knn_30_X = KNN(k=30).complete(X_corrupt)
+            scores['knn_30'].append(evaluate(knn_30_X, X))
 
             if save_imputed:
-                np.savetxt('./output/sweeps' + name + '_MICE.csv',
+                np.savetxt('./output/sweeps/' + name + '_MICE.csv',
                            mice_X, delimiter=',', newline='\n')
-                np.savetxt('./output/sweeps' + name + '_matrix_fact.csv',
+                np.savetxt('./output/sweeps/' + name + '_matrix_fact.csv',
                            matrix_fact_X, delimiter=',', newline='\n')
-                np.savetxt('./output/sweeps' + name + '_nnm.csv',
+                np.savetxt('./output/sweeps/' + name + '_nnm.csv',
                            nnm_X, delimiter=',', newline='\n')
-                np.savetxt('./output/sweeps' + name + '_biscaler.csv',
-                           biscaler_X, delimiter=',', newline='\n')
+                np.savetxt('./output/sweeps/' + name + '_knn_1.csv',
+                           knn_1_X, delimiter=',', newline='\n')
+                np.savetxt('./output/sweeps/' + name + '_knn_3.csv',
+                           knn_3_X, delimiter=',', newline='\n')
+                np.savetxt('./output/sweeps/' + name + '_knn_9.csv',
+                           knn_9_X, delimiter=',', newline='\n')
+                np.savetxt('./output/sweeps/' + name + '_knn_15.csv',
+                           knn_15_X, delimiter=',', newline='\n')
+                np.savetxt('./output/sweeps/' + name + '_knn_30.csv',
+                           knn_30_X, delimiter=',', newline='\n')
 
         print(scores)
 
@@ -133,7 +130,7 @@ def evaluate(X, X_imputed, method='mse'):
 def load_file(name):
     print(name)
     X = np.genfromtxt('./data/' + name + '.csv', delimiter=',',
-                      skip_header=1)
+                      skip_header=1)[:, 1:]
     print(X.shape)
     return X
 
