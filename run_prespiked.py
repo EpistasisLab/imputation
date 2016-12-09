@@ -50,7 +50,7 @@ def run(name, patients, run_all, save_imputed):
                   'MICE_pmm_lambda_reg_01': [], 'MICE_pmm_lambda_reg_001': [],
                   'knn_1': [], 'knn_3': [], 'knn_9': [], 'knn_15': [],
                   'knn_30': [], 'knn_81': [], 'knn_243': [], 'knn_751': [],
-                  'knn_2000': [], 'knn_6000': [], 'MatricxFactor': [],
+                  'knn_2000': [], 'knn_6000': [], 'MatrixFactor': [],
                   'NuclearMin': []}
 
         print("Iteration " + str(i))
