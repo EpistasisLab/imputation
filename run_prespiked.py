@@ -32,7 +32,7 @@ def run(name, patients, run_all, save_imputed):
         np.savetxt('./output/sweeps/' + name + '_input.csv',
                    X, delimiter=',', newline='\n')
 
-        scores = {'mean': [], 'median': [], 'random', [], 'svd_1': [],
+        scores = {'mean': [], 'median': [], 'random': [], 'svd_1': [],
                   'svd_2': [], 'svd_3': [], 'svd_4': [], 'svd_5': [],
                   'svd_6': [], 'svd_7': [], 'svd_8': [], 'svd_9': [],
                   'svd_10': [],
