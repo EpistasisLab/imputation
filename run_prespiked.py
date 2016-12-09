@@ -14,38 +14,45 @@ def run(name, patients, run_all, save_imputed):
     random_seed = 123
     np.random.seed(seed=random_seed)
 
-    X_corrupt = load_file(name + 'SpikeIn')[:patients]
-    X = load_file(name)[:patients]
+    folds = 10
+    patient_count, features = load_file(name).shape
+    fold_size = patient_count / folds
 
-    np.savetxt('./output/sweeps/' + name + '_input.csv',
-               X, delimiter=',', newline='\n')
-
-    scores = {'mean': [], 'median': [], 'random', [], 'svd_1': [],
-              'svd_2': [], 'svd_3': [], 'svd_4': [], 'svd_5': [], 'svd_6': [],
-              'svd_7': [], 'svd_8': [], 'svd_9': [], 'svd_10': [],
-              'svd_11': [], 'svd_12': [], 'svd_13': [], 'svd_14': [],
-              'svd_15': [], 'svd_16': [], 'svd_17': [], 'svd_18': [],
-              'svd_19': [], 'svd_20': [], 'svd_21': [], 'svd_22': [],
-              'svd_23': [], 'svd_24': [], 'si': [], 'si_s_half': [],
-              'si_s_1': [], 'si_s_2': [], 'si_s_4': [], 'si_s_8': [],
-              'si_s_16': [], 'si_s_32': [], 'si_s_64': [], 'si_s_128': [],
-              'MICE_col_lambda_reg_25': [], 'MICE_col_lambda_reg_10': [],
-              'MICE_col_lambda_reg_1': [], 'MICE_col_lambda_reg_01': [],
-              'MICE_col_lambda_reg_001': [], 'MICE_pmm': [],
-              'MICE_pmm_lambda_reg_25': [],
-              'MICE_pmm_lambda_reg_10': [], 'MICE_pmm_lambda_reg_1': [],
-              'MICE_pmm_lambda_reg_01': [], 'MICE_pmm_lambda_reg_001': [],
-              'knn_1': [], 'knn_3': [], 'knn_9': [], 'knn_15': [],
-              'knn_30': [], 'knn_81': [], 'knn_243': [], 'knn_751': [],
-              'knn_2000': [], 'knn_6000': []}
-
-    if run_all:
-        scores['MICE'] = []
-        scores['MatrixFactor'] = []
-        scores['NuclearMin'] = []
-
+    base_name = name
     # range 1 if only 1 spike in
-    for i in range(1):
+    for i in range(folds):
+        name = base_name + '_' + str(i)
+
+        start = i*fold_size
+        end = (1+i) * fold_size
+
+        X_corrupt = load_file(base_name + 'SpikeIn')[start:end]
+        X = load_file(base_name)[start:end]
+
+        np.savetxt('./output/sweeps/' + name + '_input.csv',
+                   X, delimiter=',', newline='\n')
+
+        scores = {'mean': [], 'median': [], 'random', [], 'svd_1': [],
+                  'svd_2': [], 'svd_3': [], 'svd_4': [], 'svd_5': [],
+                  'svd_6': [], 'svd_7': [], 'svd_8': [], 'svd_9': [],
+                  'svd_10': [],
+                  'svd_11': [], 'svd_12': [], 'svd_13': [], 'svd_14': [],
+                  'svd_15': [], 'svd_16': [], 'svd_17': [], 'svd_18': [],
+                  'svd_19': [], 'svd_20': [], 'svd_21': [], 'svd_22': [],
+                  'svd_23': [], 'svd_24': [], 'si': [], 'si_s_half': [],
+                  'si_s_1': [], 'si_s_2': [], 'si_s_4': [], 'si_s_8': [],
+                  'si_s_16': [], 'si_s_32': [], 'si_s_64': [], 'si_s_128': [],
+                  'MICE_col_lambda_reg_25': [], 'MICE_col_lambda_reg_10': [],
+                  'MICE_col_lambda_reg_1': [], 'MICE_col_lambda_reg_01': [],
+                  'MICE_col_lambda_reg_001': [], 'MICE_pmm': [],
+                  'MICE_pmm_lambda_reg_25': [],
+                  'MICE_pmm_lambda_reg_10': [], 'MICE_pmm_lambda_reg_1': [],
+                  'MICE_pmm_lambda_reg_01': [], 'MICE_pmm_lambda_reg_001': [],
+                  'knn_1': [], 'knn_3': [], 'knn_9': [], 'knn_15': [],
+                  'knn_30': [], 'knn_81': [], 'knn_243': [], 'knn_751': [],
+                  'knn_2000': [], 'knn_6000': [], 'MatricxFactor': [],
+                  'NuclearMin': []}
+
         print("Iteration " + str(i))
 
         simple_mean_X = SimpleFill(fill_method='mean').complete(X_corrupt)
@@ -63,7 +70,7 @@ def run(name, patients, run_all, save_imputed):
 
         svd_2_X = IterativeSVD(rank=2).complete(X_corrupt)
         scores['svd_2'].append(evaluate(svd_2_X, X))
-        
+
         svd_3_X = IterativeSVD(rank=3).complete(X_corrupt)
         scores['svd_3'].append(evaluate(svd_3_X, X))
 
@@ -143,32 +150,33 @@ def run(name, patients, run_all, save_imputed):
         scores['si_s_2'].append(evaluate(si_s_2_X, X))
 
         si_s_4_X = SoftImpute(shrinkage_value=4).complete(X_corrupt)
-        scores['si_s_4'].append(evaluate(si_s_4_X, X))  
+        scores['si_s_4'].append(evaluate(si_s_4_X, X))
 
         si_s_8_X = SoftImpute(shrinkage_value=8).complete(X_corrupt)
-        scores['si_s_8'].append(evaluate(si_s_8_X, X))         
+        scores['si_s_8'].append(evaluate(si_s_8_X, X))
 
         si_s_16_X = SoftImpute(shrinkage_value=16).complete(X_corrupt)
         scores['si_s_16'].append(evaluate(si_s_16_X, X))
 
         si_s_32_X = SoftImpute(shrinkage_value=32).complete(X_corrupt)
-        scores['si_s_32'].append(evaluate(si_s_32_X, X))             
+        scores['si_s_32'].append(evaluate(si_s_32_X, X))
 
         si_s_64_X = SoftImpute(shrinkage_value=64).complete(X_corrupt)
-        scores['si_s_64'].append(evaluate(si_s_64_X, X)) 
+        scores['si_s_64'].append(evaluate(si_s_64_X, X))
 
         si_s_128_X = SoftImpute(shrinkage_value=128).complete(X_corrupt)
-        scores['si_s_128'].append(evaluate(si_s_128_X, X))  
+        scores['si_s_128'].append(evaluate(si_s_128_X, X))
 
-        pkl.dump(scores, open('./output/sweeps/base_scores_' + name + 
+        pkl.dump(scores, open('./output/sweeps/base_scores_' + name +
                               '_' + str(patients) + '.p', 'w'))
 
         if save_imputed:
-          # @TODO save all?
             np.savetxt('./output/sweeps/' + name + '_simple_mean.csv',
                        simple_mean_X, delimiter=',', newline='\n')
             np.savetxt('./output/sweeps/' + name + '_simple_median.csv',
                        simple_median_X, delimiter=',', newline='\n')
+            np.savetxt('./output/sweeps/' + name + '_simple_random.csv',
+                       random_X, delimiter=',', newline='\n'),
             np.savetxt('./output/sweeps/' + name + '_svd_1.csv',
                        svd_1_X, delimiter=',', newline='\n')
             np.savetxt('./output/sweeps/' + name + '_svd_2.csv',
@@ -237,7 +245,6 @@ def run(name, patients, run_all, save_imputed):
                        si_s_64_X, delimiter=',', newline='\n')
             np.savetxt('./output/sweeps/' + name + '_si_s_128.csv',
                        si_s_128_X, delimiter=',', newline='\n')
-
 
         if run_all:
             mice_X = MICE().complete(X_corrupt)
