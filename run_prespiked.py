@@ -9,6 +9,7 @@ from fancyimpute import (SimpleFill, KNN, SoftImpute, IterativeSVD,
                          AutoEncoder)
 from fancyimpute.bayesian_ridge_regression import BayesianRidgeRegression
 
+
 def run(name, patients, run_all, save_imputed):
     random_seed = 123
     np.random.seed(seed=random_seed)
@@ -19,22 +20,23 @@ def run(name, patients, run_all, save_imputed):
     np.savetxt('./output/sweeps/' + name + '_input.csv',
                X, delimiter=',', newline='\n')
 
-    scores = {'simple_mean': [], 'simple_median': [], 'svd_1': [], 
+    scores = {'mean': [], 'median': [], 'random', [], 'svd_1': [],
               'svd_2': [], 'svd_3': [], 'svd_4': [], 'svd_5': [], 'svd_6': [],
-              'svd_7': [], 'svd_8': [], 'svd_9': [], 'svd_10': [], 'svd_11': [],
-              'svd_12': [], 'svd_13': [], 'svd_14': [], 'svd_15': [],
-              'svd_16': [], 'svd_17': [], 'svd_18': [], 'svd_19': [], 'svd_20': [],
-              'svd_21': [], 'svd_22': [], 'svd_23': [], 'svd_24': [],
-              'si': [], 'si_s_half': [], 'si_s_1': [], 'si_s_2': [],
-              'si_s_4': [], 'si_s_8': [], 'si_s_16': [], 'si_s_32': [],
-              'si_s_64': [], 'si_s_128': [], 'MICE_col_lambda_reg_25': [],
-              'MICE_col_lambda_reg_10': [], 'MICE_col_lambda_reg_1': [],
-              'MICE_col_lambda_reg_01': [], 'MICE_col_lambda_reg_001': [],
-              'MICE_pmm': [], 'MICE_pmm_lambda_reg_25': [],
+              'svd_7': [], 'svd_8': [], 'svd_9': [], 'svd_10': [],
+              'svd_11': [], 'svd_12': [], 'svd_13': [], 'svd_14': [],
+              'svd_15': [], 'svd_16': [], 'svd_17': [], 'svd_18': [],
+              'svd_19': [], 'svd_20': [], 'svd_21': [], 'svd_22': [],
+              'svd_23': [], 'svd_24': [], 'si': [], 'si_s_half': [],
+              'si_s_1': [], 'si_s_2': [], 'si_s_4': [], 'si_s_8': [],
+              'si_s_16': [], 'si_s_32': [], 'si_s_64': [], 'si_s_128': [],
+              'MICE_col_lambda_reg_25': [], 'MICE_col_lambda_reg_10': [],
+              'MICE_col_lambda_reg_1': [], 'MICE_col_lambda_reg_01': [],
+              'MICE_col_lambda_reg_001': [], 'MICE_pmm': [],
+              'MICE_pmm_lambda_reg_25': [],
               'MICE_pmm_lambda_reg_10': [], 'MICE_pmm_lambda_reg_1': [],
               'MICE_pmm_lambda_reg_01': [], 'MICE_pmm_lambda_reg_001': [],
               'knn_1': [], 'knn_3': [], 'knn_9': [], 'knn_15': [],
-              'knn_30': [], 'knn_81': [], 'knn_243': [], 'knn_751': [], 
+              'knn_30': [], 'knn_81': [], 'knn_243': [], 'knn_751': [],
               'knn_2000': [], 'knn_6000': []}
 
     if run_all:
@@ -51,6 +53,9 @@ def run(name, patients, run_all, save_imputed):
 
         simple_median_X = SimpleFill(fill_method='median').complete(X_corrupt)
         scores['simple_median'].append(evaluate(simple_median_X, X))
+
+        random_X = SimpleFill(fill_method='random').complete(X_corrupt)
+        scores['random'].append(evaluate(random_X, X))
 
         # SVD
         svd_1_X = IterativeSVD(rank=1).complete(X_corrupt)
