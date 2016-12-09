@@ -32,10 +32,10 @@ def run(name, patients, run_all, save_imputed):
         np.savetxt('./output/sweeps/' + name + '_input.csv',
                    X, delimiter=',', newline='\n')
 
-        scores = {'mean': [], 'median': [], 'random': [], 'svd_1': [],
-                  'svd_2': [], 'svd_3': [], 'svd_4': [], 'svd_5': [],
-                  'svd_6': [], 'svd_7': [], 'svd_8': [], 'svd_9': [],
-                  'svd_10': [],
+        scores = {'simple_mean': [], 'simple_median': [], 'random': [],
+                  'svd_1': [], 'svd_2': [], 'svd_3': [], 'svd_4': [],
+                  'svd_5': [], 'svd_6': [], 'svd_7': [], 'svd_8': [],
+                  'svd_9': [], 'svd_10': [],
                   'svd_11': [], 'svd_12': [], 'svd_13': [], 'svd_14': [],
                   'svd_15': [], 'svd_16': [], 'svd_17': [], 'svd_18': [],
                   'svd_19': [], 'svd_20': [], 'svd_21': [], 'svd_22': [],
@@ -338,7 +338,6 @@ def run(name, patients, run_all, save_imputed):
                            mice_col_lambda_reg_01, delimiter=',', newline='\n')
                 np.savetxt('./output/sweeps/' + name + '_mice_col_lambda_reg_001.csv',
                            mice_col_lambda_reg_001, delimiter=',', newline='\n')
-
                 np.savetxt('./output/sweeps/' + name + '_mice_pmm_X.csv',
                            mice_pmm_X, delimiter=',', newline='\n')
                 np.savetxt('./output/sweeps/' + name + '_mice_pmm_lambda_reg_25.csv',
@@ -350,11 +349,9 @@ def run(name, patients, run_all, save_imputed):
                 np.savetxt('./output/sweeps/' + name + '_mice_pmm_lambda_reg_01.csv',
                            mice_pmm_lambda_reg_01, delimiter=',', newline='\n')
                 np.savetxt('./output/sweeps/' + name + '_mice_pmm_lambda_reg_001.csv',
-                           mice_pmm_lambda_reg_001, delimiter=',', newline='\n')
-                                
+                           mice_pmm_lambda_reg_001, delimiter=',', newline='\n')  
                 np.savetxt('./output/sweeps/' + name + '_matrix_fact.csv',
                            matrix_fact_X, delimiter=',', newline='\n')
-                
                 np.savetxt('./output/sweeps/' + name + '_knn_1.csv',
                            knn_1_X, delimiter=',', newline='\n')
                 np.savetxt('./output/sweeps/' + name + '_knn_3.csv',
