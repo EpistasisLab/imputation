@@ -35,7 +35,7 @@ def run_predict(filename, X, col):
         # scores.append(roc_auc_score(y[test], rfc.predict(X[test])))
 
     print(scores)
-    pkl.dump(scores, open('data/spikein/' + file_name + '_vals_scores.p', 'w'))
+    pkl.dump(scores, open('data/spikein/' + filename + '_vals_scores.p', 'w'))
 
 
 if __name__ == "__main__":
