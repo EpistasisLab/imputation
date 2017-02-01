@@ -21,17 +21,19 @@ def run_predict(filename, X, col):
 
     cv = StratifiedKFold(y, n_folds=10, random_state=123, shuffle=True)
     scores_dict = {}
+    scores_dict['sgd'] = []
+    scores_dict['rfc'] = []
 
     print(np.unique(y, return_counts=True))
 
     for i, (train, test) in enumerate(cv):
         clf = SGDClassifier(loss="hinge", penalty="l2")
         clf.fit(X[train], y[train])
-        scores_dict['sgd'] = roc_auc_score(y[test], clf.predict(X[test]))
+        scores_dict['sgd'].append(roc_auc_score(y[test], clf.predict(X[test])))
 
         rfc = RandomForestClassifier(n_jobs=-1, class_weight="balanced")
         rfc.fit(X[train], y[train])
-        scores_dict['rfc'] = roc_auc_score(y[test], rfc.predict(X[test]))
+        scores_dict['rfc'].append(roc_auc_score(y[test], rfc.predict(X[test])))
 
     print(scores_dict)
     pkl.dump(scores_dict, open('data/spikein/' + filename + '_vals_scores.p', 'w'))
