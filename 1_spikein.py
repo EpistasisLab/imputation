@@ -6,8 +6,12 @@ import h5py
 class MCAR():
     def spikein(self, X, rate):
         print('MCAR')
-        mask = np.random.choice([False, True], X.shape, p=[rate, 1-rate])
-        return X[mask]
+        # @TODO there is definitely a more efficient way to do this
+        for idx, row in enumerate(X):
+            indices = np.random.random_integers(0, len(row) - 1,
+                                                int(len(row) * rate))
+            X[idx][indices] = np.nan
+        return X
 
 # replace based on value of another column
 class MAR():
@@ -58,15 +62,15 @@ def run(run_name='test', file_name='completeCasesBoxCox.csv'):
     #                 f.close()
 
     # create MAR
-    mar = MAR()
-    for f in range(X.shape[1]):
-        if f>3:
-            # one trial per quartile
-            for q in range(4):
-                X_corrupt = mar.spikein(X.copy(), f, q)
-                xf = h5py.File('./data/spikein/MAR_' + str(f) + '_' + str(q), 'a')
-                xf.create_dataset('dataset', data=X_corrupt)
-                xf.close()
+    # mar = MAR()
+    # for f in range(X.shape[1]):
+    #     if f>3:
+    #         # one trial per quartile
+    #         for q in range(4):
+    #             X_corrupt = mar.spikein(X.copy(), f, q)
+    #             xf = h5py.File('./data/spikein/MAR_' + str(f) + '_' + str(q), 'a')
+    #             xf.create_dataset('dataset', data=X_corrupt)
+    #             xf.close()
 
     # create MCAR
     spike_rate = [0.1, 0.2, 0.3, 0.4, 0.5]

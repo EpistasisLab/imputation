@@ -39,8 +39,10 @@ def run_predict(filename, X, col):
 
 
 if __name__ == "__main__":
+    i = 0
     for filename in os.listdir('data/spikein'):
         if filename != '.DS_Store' and 'scores' not in filename:
+            i += 1
             if filename.startswith('MCAR'):
                 continue
                 # col = 0
@@ -49,8 +51,7 @@ if __name__ == "__main__":
                 col = int(filename.split('_')[1])
             else:
                 col = int(filename.split('_')[2])
-            print(filename)
-            print(col)
+            print(str(i) + ' ' + filename)
             f = h5py.File('./data/spikein/' + filename, 'r')
             X = f['dataset'][:]
             run_predict(filename, X, col)
