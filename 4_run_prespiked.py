@@ -410,4 +410,5 @@ if __name__ == "__main__":
     parser.add_argument("--save_imputed", type=int, default=0)
 
     args = parser.parse_args()
+    args.name = args.name.split('/')[-1]
     run(args.name, args.patients, args.run_all, args.save_imputed)
