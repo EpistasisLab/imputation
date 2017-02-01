@@ -1,6 +1,7 @@
 import pickle as pkl
 import numpy as np
 import argparse
+import h5py
 
 from sklearn.preprocessing import Imputer
 from fancyimpute import (SimpleFill, KNN, SoftImpute, IterativeSVD,
@@ -17,6 +18,7 @@ def run(name, patients, run_all, save_imputed):
     folds = 1
     patient_count, features = load_file(name).shape
 
+    # @TODO patients not currently used
     # only use first 10k for now
     fold_size = patient_count / folds / 10
     base_name = name
@@ -29,8 +31,8 @@ def run(name, patients, run_all, save_imputed):
 
         X_corrupt = load_file(base_name)[start:end]
         X = np.genfromtxt('./data/completeCasesBoxCox.csv', delimiter=',',
-                          skip_header=1)[:, 1:]
-        
+                          skip_header=1)[start:end, 1:]
+
 
         np.savetxt('./output/sweeps/' + name + '_input.csv',
                    X, delimiter=',', newline='\n')
