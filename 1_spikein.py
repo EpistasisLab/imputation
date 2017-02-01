@@ -44,18 +44,18 @@ def run(run_name='test', file_name='completeCasesBoxCox.csv'):
     X = load_file(file_name)
 
     # create MNAR
-    mnar = MNAR()
-    print(X.shape[1])
-    for col_a in range(X.shape[1]):
-        for col_b in range(X.shape[1]):
-            print(col_a, col_b)
-            if col_a != col_b and col_a > 0 and col_b > 3:
-                for q in range(4):
-                    X_corrupt = mnar.spikein(X.copy(), col_a, col_b, q)
-                    f = h5py.File('./data/spikein/MNAR_' + str(col_a) + '_' +
-                                  str(col_b) + '_' + str(q), 'a')
-                    f.create_dataset('dataset', data=X_corrupt)
-                    f.close()
+    # mnar = MNAR()
+    # print(X.shape[1])
+    # for col_a in range(X.shape[1]):
+    #     for col_b in range(X.shape[1]):
+    #         print(col_a, col_b)
+    #         if col_a != col_b and col_a > 0 and col_b > 3:
+    #             for q in range(4):
+    #                 X_corrupt = mnar.spikein(X.copy(), col_a, col_b, q)
+    #                 f = h5py.File('./data/spikein/MNAR_' + str(col_a) + '_' +
+    #                               str(col_b) + '_' + str(q), 'a')
+    #                 f.create_dataset('dataset', data=X_corrupt)
+    #                 f.close()
 
     # create MAR
     mar = MAR()
@@ -64,9 +64,9 @@ def run(run_name='test', file_name='completeCasesBoxCox.csv'):
             # one trial per quartile
             for q in range(4):
                 X_corrupt = mar.spikein(X.copy(), f, q)
-                h5py.File('./data/spikein/MAR_' + str(f) + '_' + str(q), 'a')
-                f.create_dataset('dataset', data=X_corrupt)
-                f.close()
+                xf = h5py.File('./data/spikein/MAR_' + str(f) + '_' + str(q), 'a')
+                xf.create_dataset('dataset', data=X_corrupt)
+                xf.close()
 
     # create MCAR
     spike_rate = [0.1, 0.2, 0.3, 0.4, 0.5]
