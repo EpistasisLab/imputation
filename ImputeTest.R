@@ -26,8 +26,10 @@ X_missing = X_missing[1:250,]
 X.df <- data.frame(matrix(unlist(X)))
 
 print(args[2])
-imp <- mice(X_missing, visitSequence = "monotone", predictorMatrix = ini$predictorMatrix, ridge=.3, m=1, method = args[2], maxit = 100)
+imp <- mice(X_missing, visitSequence = "monotone", predictorMatrix = ini$predictorMatrix, 
+            ridge=.3, m=1, method = args[2], maxit = 100)
 
+print('imp')
 print(dim(imp$imp))
 splt<-imp
 impValues<-imp
