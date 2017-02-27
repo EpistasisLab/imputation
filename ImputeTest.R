@@ -21,8 +21,6 @@ X = read.csv('../completeCasesBoxCox.csv')[1:9999,2:32]
 print(dim(X))
 
 # for testing use subset
-X = X[1:250,]
-X_missing = X_missing[1:250,]
 
 X.df <- data.frame(matrix(unlist(X)))
 for(i in 1:length(impMethod)){
