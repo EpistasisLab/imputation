@@ -1,7 +1,7 @@
 DIRECTORY=./data/spikein/
+N=16
 
-for i in $DIRECTORY/MAR_*; do
-sem -j+0 (
-   python 4_run_prespiked.py --name $i --run_all 1 --save_imputed 1
+for i in $DIRECTORY/MNAR_*; do
+(
+   python 4_run_prespiked.py --name $i --run_all 1 --save_imputed 0
 ) done
-sem --wait
