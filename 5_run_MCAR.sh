@@ -1,4 +1,4 @@
-!#/bin/bash
+#!/bin/bash
 
 DIRECTORY=./data/spikein/
 num_procs=16
