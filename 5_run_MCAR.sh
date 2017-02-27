@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DIRECTORY=./data/spikein/
+DIRECTORY=./data/spikein
 num_procs=16
 
 for i in $DIRECTORY/MCAR_*; do
