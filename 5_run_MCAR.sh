@@ -9,5 +9,5 @@ for i in $DIRECTORY/MCAR_*; do
       && (( ${#curr_jobs[@]} >= num_procs )); do
         wait -n
   done
-  Rscript ImputeTest.R $i &
+  Rscript ImputeTest.R ${i##*/} &
 ) done
