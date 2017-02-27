@@ -31,6 +31,8 @@ imp <- mice(X_missing, visitSequence = "monotone", predictorMatrix = ini$predict
 splt<-imp
 impValues<-imp
 measures<-X_missing
+print(dim(impValues))
+print(dim(measures))
 for (j in 1:length(impValues)){
   measures[which(is.na(measures[,j])),j]<-impValues[[j]][,1]
 }
