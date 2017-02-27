@@ -11,18 +11,14 @@ set.seed(23515)
 #print(head(X_missing))
 
 tic<-Sys.time()
-#impMethod<-c("pmm", "norm", "norm.nob", "norm.boot", "norm.predict", "mean", "rf", "ri", "sample") # quadratic throws warnings glm.fit: algorithm did not converge 
-impMethod<-c("pmm", "norm") # quadratic throws warnings glm.fit: algorithm did not converge 
+impMethod<-c("pmm", "norm", "norm.nob", "norm.boot", "norm.predict", "mean", "rf", "ri", "sample") # quadratic throws warnings glm.fit: algorithm did not converge 
+#impMethod<-c("pmm", "norm") # quadratic throws warnings glm.fit: algorithm did not converge 
 impList<-list()
 ini <- mice(X_missing, maxit = 0)
 
 eval_list<-list()
 X = read.csv('../completeCasesBoxCox.csv')[1:9999,2:32]
 print(dim(X))
-
-# for testing use subset
-X = X[1:250,]
-X_missing = X_missing[1:250,]
 
 X.df <- data.frame(matrix(unlist(X)))
 for(i in 1:length(impMethod)){
