@@ -3,9 +3,10 @@ library(randomForest)
 library(reshape2)
 
 args = commandArgs(trailingOnly=TRUE)
-setwd('~/code/imputation/data/spikeincsv/')
+setwd('./data/')
 print(args[1])
-X_missing = read.csv(args[1])
+file_name = paste(args[1], '.csv', sep='')
+X_missing = read.csv(file_name)
 print(dim(X_missing))
 set.seed(23515)
 #print(head(X_missing))
@@ -17,7 +18,7 @@ impList<-list()
 ini <- mice(X_missing, maxit = 0)
 
 eval_list<-list()
-X = read.csv('../completeCasesBoxCox.csv')[1:9999,2:32]
+X = read.csv('./completeCasesBoxCox.csv')[1:9999,2:32]
 print(dim(X))
 
 X = X[1:250,]
@@ -29,10 +30,7 @@ print(args[2])
 imp <- mice(X_missing, visitSequence = "monotone", predictorMatrix = ini$predictorMatrix, 
             ridge=.3, m=1, method = args[2], maxit = 100)
 
-print('imp')
-print(dim(imp$imp))
-splt<-imp
-impValues<-imp
+impValues<-imp$imp
 measures<-X_missing
 print(dim(impValues))
 print(dim(measures))
@@ -40,12 +38,12 @@ for (j in 1:length(impValues)){
   measures[which(is.na(measures[,j])),j]<-impValues[[j]][,1]
 }
 m.df <- data.frame(matrix(unlist(measures)))
-eval_list[i] = sqrt(mean((m.df-X.df)^2))
+eval_list = sqrt(mean((m.df-X.df)^2))
 
 Sys.time()-tic
 
-file_name <- paste('../../output/sweeps/R', args[1], args[2], sep='_')
+file_name <- paste('../output/R', args[1], args[2], '.csv', sep='_')
 print(file_name)
 eval.df <- data.frame(matrix(unlist(eval_list)))
-rownames(eval.df) <- impMethod
+rownames(eval.df) <- args[2]
 write.csv(eval.df, file=file_name)
