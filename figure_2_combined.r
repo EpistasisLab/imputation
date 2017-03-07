@@ -1,3 +1,10 @@
+library(reshape2)
+library(ggplot2)
+library(gridExtra)
+
+setwd('/home/brett/code/imputation/')
+# setwd('/Users/brett/code/imputation/')
+
 # MCAR
 mcar_scores<-read.csv('./data/prediction_scores/mcar.csv')
 print(dim(mcar_scores))
