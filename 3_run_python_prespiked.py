@@ -18,11 +18,9 @@ def run(name, patients, run_all, save_imputed):
     folds = 1
     patient_count, features = load_file(name).shape
 
-    # @TODO patients not currently used
-    # only use first 10k for now
     fold_size = patient_count / folds / 10
     base_name = name
-    # range 1 if only 1 spike in
+
     for i in range(folds):
         name = base_name + '_' + str(i)
 
@@ -172,8 +170,8 @@ def run(name, patients, run_all, save_imputed):
         si_s_128_X = SoftImpute(shrinkage_value=128).complete(X_corrupt)
         scores['si_s_128'].append(evaluate(si_s_128_X, X))
 
-        pkl.dump(scores, open('./output/sweeps/base_scores_' + name +
-                              '_' + str(patients) + '.p', 'w'))
+        # pkl.dump(scores, open('./output/sweeps/base_scores_' + name +
+        #                       '_' + str(patients) + '.p', 'w'))
 
         if save_imputed:
             np.savetxt('./output/sweeps/' + name + '_simple_mean.csv',
@@ -379,10 +377,9 @@ def run(name, patients, run_all, save_imputed):
                 np.savetxt('./output/sweeps/' + name + 'knn_6000.csv',
                            knn_6000_X, delimiter=',', newline='\n')
 
-        print(scores)
-
-    pkl.dump(scores, open('./output/sweeps/' + name + '_' + str(patients) +
-                          '.p', 'w'))
+    print(scores)
+    np.savetxt('./output/scores/' + name + '.csv', scores, delimiter='',
+               newline='\n')
 
 
 def evaluate(X, X_imputed, method='mse'):
