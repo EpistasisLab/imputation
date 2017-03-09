@@ -5,8 +5,10 @@ library(reshape2)
 args = commandArgs(trailingOnly=TRUE)
 setwd('./data/')
 print(args[1])
-file_name = paste(args[1], '.csv', sep='')
-X_missing = read.csv(file_name)[1:9999,]
+print(args[2])
+print(args[3])
+file_name = paste('spikeincsv/', args[1], '/', args[2], '.csv', sep='')
+X_missing = read.csv(file_name)[1:10000,]
 print(dim(X_missing))
 set.seed(23515)
 #print(head(X_missing))
@@ -24,7 +26,7 @@ X.df <- data.frame(matrix(unlist(X)))
 for(i in 1:length(impMethod)){
   print(impMethod[i])
   imp <- mice(X_missing, visitSequence = "monotone", predictorMatrix = ini$predictorMatrix, ridge=.3,
-              m=1, method = impMethod[i], maxit = 1)
+              m=1, method = impMethod[i], maxit = 100)
   impList[[i]]<-imp
   
   splt<-imp$method[1]

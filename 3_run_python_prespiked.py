@@ -2,6 +2,8 @@ import pickle as pkl
 import numpy as np
 import argparse
 import h5py
+import math
+import pandas as pd
 
 from sklearn.preprocessing import Imputer
 from fancyimpute import (SimpleFill, KNN, SoftImpute, IterativeSVD,
@@ -11,396 +13,377 @@ from fancyimpute import (SimpleFill, KNN, SoftImpute, IterativeSVD,
 from fancyimpute.bayesian_ridge_regression import BayesianRidgeRegression
 
 
-def run(name, patients, run_all, save_imputed):
+def run(folder, name, patients, run_all, save_imputed):
     random_seed = 123
     np.random.seed(seed=random_seed)
 
-    folds = 1
-    patient_count, features = load_file(name).shape
+    X_corrupt = load_file(folder, name)
+    name = name.split('.csv')[0]
+    print(name)
 
-    fold_size = patient_count / folds / 10
-    base_name = name
+    end = X_corrupt.shape[0]
+    print(end)
+    X = np.genfromtxt('./data/completeCasesBoxCox.csv', delimiter=',',
+                      skip_header=1)[:end, 1:]
 
-    for i in range(folds):
-        name = base_name + '_' + str(i)
+    scores = {}
+    simple_mean_X = SimpleFill(fill_method='mean').complete(X_corrupt)
+    scores['simple_mean'] = evaluate(simple_mean_X, X, X_corrupt)
 
-        start = i*fold_size
-        end = (1+i) * fold_size
+    simple_median_X = SimpleFill(fill_method='median').complete(X_corrupt)
+    scores['simple_median'] = evaluate(simple_median_X, X, X_corrupt)
 
-        X_corrupt = load_file(base_name)[start:end]
-        X = np.genfromtxt('./data/completeCasesBoxCox.csv', delimiter=',',
-                          skip_header=1)[start:end, 1:]
+    random_X = SimpleFill(fill_method='random').complete(X_corrupt)
+    scores['random'] = evaluate(random_X, X, X_corrupt)
 
+    # SVD
+    svd_1_X = IterativeSVD(rank=1).complete(X_corrupt)
+    scores['svd_1'] = evaluate(svd_1_X, X, X_corrupt)
 
-        np.savetxt('./output/sweeps/' + name + '_input.csv',
-                   X, delimiter=',', newline='\n')
+    svd_2_X = IterativeSVD(rank=2).complete(X_corrupt)
+    scores['svd_2'] = evaluate(svd_2_X, X, X_corrupt)
 
-        scores = {'simple_mean': [], 'simple_median': [], 'random': [],
-                  'svd_1': [], 'svd_2': [], 'svd_3': [], 'svd_4': [],
-                  'svd_5': [], 'svd_6': [], 'svd_7': [], 'svd_8': [],
-                  'svd_9': [], 'svd_10': [],
-                  'svd_11': [], 'svd_12': [], 'svd_13': [], 'svd_14': [],
-                  'svd_15': [], 'svd_16': [], 'svd_17': [], 'svd_18': [],
-                  'svd_19': [], 'svd_20': [], 'svd_21': [], 'svd_22': [],
-                  'svd_23': [], 'svd_24': [], 'si': [], 'si_s_half': [],
-                  'si_s_1': [], 'si_s_2': [], 'si_s_4': [], 'si_s_8': [],
-                  'si_s_16': [], 'si_s_32': [], 'si_s_64': [], 'si_s_128': [],
-                  'MICE': [], 'MICE_col_lambda_reg_25': [],
-                  'MICE_col_lambda_reg_10': [], 'MICE_col_lambda_reg_1': [],
-                  'MICE_col_lambda_reg_01': [], 'MICE_col_lambda_reg_001': [],
-                  'MICE_pmm': [], 'MICE_pmm_lambda_reg_25': [],
-                  'MICE_pmm_lambda_reg_10': [], 'MICE_pmm_lambda_reg_1': [],
-                  'MICE_pmm_lambda_reg_01': [], 'MICE_pmm_lambda_reg_001': [],
-                  'knn_1': [], 'knn_3': [], 'knn_9': [], 'knn_15': [],
-                  'knn_30': [], 'knn_81': [], 'knn_243': [], 'knn_751': [],
-                  'knn_2000': [], 'knn_6000': [], 'MatrixFactor': [],
-                  'NuclearMin': []}
+    svd_3_X = IterativeSVD(rank=3).complete(X_corrupt)
+    scores['svd_3'] = evaluate(svd_3_X, X, X_corrupt)
 
-        print("Iteration " + str(i))
+    svd_4_X = IterativeSVD(rank=4).complete(X_corrupt)
+    scores['svd_4'] = evaluate(svd_4_X, X, X_corrupt)
 
-        simple_mean_X = SimpleFill(fill_method='mean').complete(X_corrupt)
-        scores['simple_mean'].append(evaluate(simple_mean_X, X))
+    svd_5_X = IterativeSVD(rank=5).complete(X_corrupt)
+    scores['svd_5'] = evaluate(svd_5_X, X, X_corrupt)
 
-        simple_median_X = SimpleFill(fill_method='median').complete(X_corrupt)
-        scores['simple_median'].append(evaluate(simple_median_X, X))
+    svd_6_X = IterativeSVD(rank=6).complete(X_corrupt)
+    scores['svd_6'] = evaluate(svd_6_X, X, X_corrupt)
 
-        random_X = SimpleFill(fill_method='random').complete(X_corrupt)
-        scores['random'].append(evaluate(random_X, X))
+    svd_7_X = IterativeSVD(rank=7).complete(X_corrupt)
+    scores['svd_7'] = evaluate(svd_7_X, X, X_corrupt)
 
-        # SVD
-        svd_1_X = IterativeSVD(rank=1).complete(X_corrupt)
-        scores['svd_1'].append(evaluate(svd_1_X, X))
+    svd_8_X = IterativeSVD(rank=8).complete(X_corrupt)
+    scores['svd_8'] = evaluate(svd_8_X, X, X_corrupt)
 
-        svd_2_X = IterativeSVD(rank=2).complete(X_corrupt)
-        scores['svd_2'].append(evaluate(svd_2_X, X))
+    svd_9_X = IterativeSVD(rank=9).complete(X_corrupt)
+    scores['svd_9'] = evaluate(svd_9_X, X, X_corrupt)
 
-        svd_3_X = IterativeSVD(rank=3).complete(X_corrupt)
-        scores['svd_3'].append(evaluate(svd_3_X, X))
+    svd_10_X = IterativeSVD(rank=10).complete(X_corrupt)
+    scores['svd_10'] = evaluate(svd_10_X, X, X_corrupt)
 
-        svd_4_X = IterativeSVD(rank=4).complete(X_corrupt)
-        scores['svd_4'].append(evaluate(svd_4_X, X))
+    svd_11_X = IterativeSVD(rank=11).complete(X_corrupt)
+    scores['svd_11'] = evaluate(svd_11_X, X, X_corrupt)
 
-        svd_5_X = IterativeSVD(rank=5).complete(X_corrupt)
-        scores['svd_5'].append(evaluate(svd_5_X, X))
+    svd_12_X = IterativeSVD(rank=12).complete(X_corrupt)
+    scores['svd_12'] = evaluate(svd_12_X, X, X_corrupt)
 
-        svd_6_X = IterativeSVD(rank=6).complete(X_corrupt)
-        scores['svd_6'].append(evaluate(svd_6_X, X))
+    svd_13_X = IterativeSVD(rank=13).complete(X_corrupt)
+    scores['svd_13'] = evaluate(svd_13_X, X, X_corrupt)
 
-        svd_7_X = IterativeSVD(rank=7).complete(X_corrupt)
-        scores['svd_7'].append(evaluate(svd_7_X, X))
+    svd_14_X = IterativeSVD(rank=14).complete(X_corrupt)
+    scores['svd_14'] = evaluate(svd_14_X, X, X_corrupt)
 
-        svd_8_X = IterativeSVD(rank=8).complete(X_corrupt)
-        scores['svd_8'].append(evaluate(svd_8_X, X))
+    svd_15_X = IterativeSVD(rank=15).complete(X_corrupt)
+    scores['svd_15'] = evaluate(svd_15_X, X, X_corrupt)
 
-        svd_9_X = IterativeSVD(rank=9).complete(X_corrupt)
-        scores['svd_9'].append(evaluate(svd_9_X, X))
+    svd_16_X = IterativeSVD(rank=16).complete(X_corrupt)
+    scores['svd_16'] = evaluate(svd_16_X, X, X_corrupt)
 
-        svd_10_X = IterativeSVD(rank=10).complete(X_corrupt)
-        scores['svd_10'].append(evaluate(svd_10_X, X))
+    svd_17_X = IterativeSVD(rank=17).complete(X_corrupt)
+    scores['svd_17'] = evaluate(svd_17_X, X, X_corrupt)
 
-        svd_11_X = IterativeSVD(rank=11).complete(X_corrupt)
-        scores['svd_11'].append(evaluate(svd_11_X, X))
+    svd_18_X = IterativeSVD(rank=18).complete(X_corrupt)
+    scores['svd_18'] = evaluate(svd_18_X, X, X_corrupt)
 
-        svd_12_X = IterativeSVD(rank=12).complete(X_corrupt)
-        scores['svd_12'].append(evaluate(svd_12_X, X))
+    svd_19_X = IterativeSVD(rank=19).complete(X_corrupt)
+    scores['svd_19'] = evaluate(svd_19_X, X, X_corrupt)
 
-        svd_13_X = IterativeSVD(rank=13).complete(X_corrupt)
-        scores['svd_13'].append(evaluate(svd_13_X, X))
+    svd_20_X = IterativeSVD(rank=20).complete(X_corrupt)
+    scores['svd_20'] = evaluate(svd_20_X, X, X_corrupt)
 
-        svd_14_X = IterativeSVD(rank=14).complete(X_corrupt)
-        scores['svd_14'].append(evaluate(svd_14_X, X))
+    svd_21_X = IterativeSVD(rank=21).complete(X_corrupt)
+    scores['svd_21'] = evaluate(svd_21_X, X, X_corrupt)
 
-        svd_15_X = IterativeSVD(rank=15).complete(X_corrupt)
-        scores['svd_15'].append(evaluate(svd_15_X, X))
+    svd_22_X = IterativeSVD(rank=22).complete(X_corrupt)
+    scores['svd_22'] = evaluate(svd_22_X, X, X_corrupt)
 
-        svd_16_X = IterativeSVD(rank=16).complete(X_corrupt)
-        scores['svd_16'].append(evaluate(svd_16_X, X))
+    svd_23_X = IterativeSVD(rank=23).complete(X_corrupt)
+    scores['svd_23'] = evaluate(svd_23_X, X, X_corrupt)
 
-        svd_17_X = IterativeSVD(rank=17).complete(X_corrupt)
-        scores['svd_17'].append(evaluate(svd_17_X, X))
+    svd_24_X = IterativeSVD(rank=24).complete(X_corrupt)
+    scores['svd_24'] = evaluate(svd_24_X, X, X_corrupt)
 
-        svd_18_X = IterativeSVD(rank=18).complete(X_corrupt)
-        scores['svd_18'].append(evaluate(svd_18_X, X))
+    si_X = SoftImpute().complete(X_corrupt)
+    scores['si'] = evaluate(si_X, X, X_corrupt)
 
-        svd_19_X = IterativeSVD(rank=19).complete(X_corrupt)
-        scores['svd_19'].append(evaluate(svd_19_X, X))
+    si_s_half_X = SoftImpute(shrinkage_value=0.5).complete(X_corrupt)
+    scores['si_s_half'] = evaluate(si_s_half_X, X, X_corrupt)
 
-        svd_20_X = IterativeSVD(rank=20).complete(X_corrupt)
-        scores['svd_20'].append(evaluate(svd_20_X, X))
+    si_s_1_X = SoftImpute(shrinkage_value=1).complete(X_corrupt)
+    scores['si_s_1'] = evaluate(si_s_1_X, X, X_corrupt)
 
-        svd_21_X = IterativeSVD(rank=21).complete(X_corrupt)
-        scores['svd_21'].append(evaluate(svd_21_X, X))
+    si_s_2_X = SoftImpute(shrinkage_value=2).complete(X_corrupt)
+    scores['si_s_2'] = evaluate(si_s_2_X, X, X_corrupt)
 
-        svd_22_X = IterativeSVD(rank=22).complete(X_corrupt)
-        scores['svd_22'].append(evaluate(svd_22_X, X))
+    si_s_4_X = SoftImpute(shrinkage_value=4).complete(X_corrupt)
+    scores['si_s_4'] = evaluate(si_s_4_X, X, X_corrupt)
 
-        svd_23_X = IterativeSVD(rank=23).complete(X_corrupt)
-        scores['svd_23'].append(evaluate(svd_23_X, X))
+    si_s_8_X = SoftImpute(shrinkage_value=8).complete(X_corrupt)
+    scores['si_s_8'] = evaluate(si_s_8_X, X, X_corrupt)
 
-        svd_24_X = IterativeSVD(rank=24).complete(X_corrupt)
-        scores['svd_24'].append(evaluate(svd_24_X, X))
+    si_s_16_X = SoftImpute(shrinkage_value=16).complete(X_corrupt)
+    scores['si_s_16'] = evaluate(si_s_16_X, X, X_corrupt)
 
-        si_X = SoftImpute().complete(X_corrupt)
-        scores['si'].append(evaluate(si_X, X))
+    si_s_32_X = SoftImpute(shrinkage_value=32).complete(X_corrupt)
+    scores['si_s_32'] = evaluate(si_s_32_X, X, X_corrupt)
 
-        si_s_half_X = SoftImpute(shrinkage_value=0.5).complete(X_corrupt)
-        scores['si_s_half'].append(evaluate(si_s_half_X, X))
+    si_s_64_X = SoftImpute(shrinkage_value=64).complete(X_corrupt)
+    scores['si_s_64'] = evaluate(si_s_64_X, X, X_corrupt)
 
-        si_s_1_X = SoftImpute(shrinkage_value=1).complete(X_corrupt)
-        scores['si_s_1'].append(evaluate(si_s_1_X, X))
+    si_s_128_X = SoftImpute(shrinkage_value=128).complete(X_corrupt)
+    scores['si_s_128'] = evaluate(si_s_128_X, X, X_corrupt)
 
-        si_s_2_X = SoftImpute(shrinkage_value=2).complete(X_corrupt)
-        scores['si_s_2'].append(evaluate(si_s_2_X, X))
+    if save_imputed:
+        np.savetxt('./output/sweeps/' + name + '_simple_mean.csv',
+                   simple_mean_X, delimiter=',', newline='\n')
+        np.savetxt('./output/sweeps/' + name + '_simple_median.csv',
+                   simple_median_X, delimiter=',', newline='\n')
+        np.savetxt('./output/sweeps/' + name + '_simple_random.csv',
+                   random_X, delimiter=',', newline='\n'),
+        np.savetxt('./output/sweeps/' + name + '_svd_1.csv',
+                   svd_1_X, delimiter=',', newline='\n')
+        np.savetxt('./output/sweeps/' + name + '_svd_2.csv',
+                   svd_2_X, delimiter=',', newline='\n')
+        np.savetxt('./output/sweeps/' + name + '_svd_3.csv',
+                   svd_3_X, delimiter=',', newline='\n')
+        np.savetxt('./output/sweeps/' + name + '_svd_4.csv',
+                   svd_4_X, delimiter=',', newline='\n')
+        np.savetxt('./output/sweeps/' + name + '_svd_5.csv',
+                   svd_5_X, delimiter=',', newline='\n')
+        np.savetxt('./output/sweeps/' + name + '_svd_6.csv',
+                   svd_6_X, delimiter=',', newline='\n')
+        np.savetxt('./output/sweeps/' + name + '_svd_7.csv',
+                   svd_7_X, delimiter=',', newline='\n')
+        np.savetxt('./output/sweeps/' + name + '_svd_8.csv',
+                   svd_8_X, delimiter=',', newline='\n')
+        np.savetxt('./output/sweeps/' + name + '_svd_9.csv',
+                   svd_9_X, delimiter=',', newline='\n')
+        np.savetxt('./output/sweeps/' + name + '_svd_10.csv',
+                   svd_10_X, delimiter=',', newline='\n')
+        np.savetxt('./output/sweeps/' + name + '_svd_11.csv',
+                   svd_11_X, delimiter=',', newline='\n')
+        np.savetxt('./output/sweeps/' + name + '_svd_12.csv',
+                   svd_12_X, delimiter=',', newline='\n')
+        np.savetxt('./output/sweeps/' + name + '_svd_13.csv',
+                   svd_13_X, delimiter=',', newline='\n')
+        np.savetxt('./output/sweeps/' + name + '_svd_14.csv',
+                   svd_14_X, delimiter=',', newline='\n')
+        np.savetxt('./output/sweeps/' + name + '_svd_15.csv',
+                   svd_15_X, delimiter=',', newline='\n')
+        np.savetxt('./output/sweeps/' + name + '_svd_16.csv',
+                   svd_16_X, delimiter=',', newline='\n')
+        np.savetxt('./output/sweeps/' + name + '_svd_17.csv',
+                   svd_17_X, delimiter=',', newline='\n')
+        np.savetxt('./output/sweeps/' + name + '_svd_18.csv',
+                   svd_18_X, delimiter=',', newline='\n')
+        np.savetxt('./output/sweeps/' + name + '_svd_19.csv',
+                   svd_19_X, delimiter=',', newline='\n')
+        np.savetxt('./output/sweeps/' + name + '_svd_20.csv',
+                   svd_20_X, delimiter=',', newline='\n')
+        np.savetxt('./output/sweeps/' + name + '_svd_21.csv',
+                   svd_21_X, delimiter=',', newline='\n')
+        np.savetxt('./output/sweeps/' + name + '_svd_22.csv',
+                   svd_22_X, delimiter=',', newline='\n')
+        np.savetxt('./output/sweeps/' + name + '_svd_23.csv',
+                   svd_23_X, delimiter=',', newline='\n')
+        np.savetxt('./output/sweeps/' + name + '_svd_24.csv',
+                   svd_24_X, delimiter=',', newline='\n')
+        np.savetxt('./output/sweeps/' + name + '_si.csv',
+                   si_X, delimiter=',', newline='\n')
+        np.savetxt('./output/sweeps/' + name + '_si_s_half.csv',
+                   si_s_half_X, delimiter=',', newline='\n')
+        np.savetxt('./output/sweeps/' + name + '_si_s_1.csv',
+                   si_s_1_X, delimiter=',', newline='\n')
+        np.savetxt('./output/sweeps/' + name + '_si_s_2.csv',
+                   si_s_2_X, delimiter=',', newline='\n')
+        np.savetxt('./output/sweeps/' + name + '_si_s_4.csv',
+                   si_s_4_X, delimiter=',', newline='\n')
+        np.savetxt('./output/sweeps/' + name + '_si_s_8.csv',
+                   si_s_8_X, delimiter=',', newline='\n')
+        np.savetxt('./output/sweeps/' + name + '_si_s_16.csv',
+                   si_s_16_X, delimiter=',', newline='\n')
+        np.savetxt('./output/sweeps/' + name + '_si_s_32.csv',
+                   si_s_32_X, delimiter=',', newline='\n')
+        np.savetxt('./output/sweeps/' + name + '_si_s_64.csv',
+                   si_s_64_X, delimiter=',', newline='\n')
+        np.savetxt('./output/sweeps/' + name + '_si_s_128.csv',
+                   si_s_128_X, delimiter=',', newline='\n')
 
-        si_s_4_X = SoftImpute(shrinkage_value=4).complete(X_corrupt)
-        scores['si_s_4'].append(evaluate(si_s_4_X, X))
+    if run_all:
+        mice_X = MICE().complete(X_corrupt)
+        scores['MICE'] = evaluate(mice_X, X, X_corrupt)
 
-        si_s_8_X = SoftImpute(shrinkage_value=8).complete(X_corrupt)
-        scores['si_s_8'].append(evaluate(si_s_8_X, X))
+        mice_col_lambda_reg_25 = MICE(
+            model=BayesianRidgeRegression(lambda_reg=0.25).complete(X_corrupt))
+        scores['MICE_col_lambda_reg_25'] = evaluate(
+            mice_col_lambda_reg_25, X, X_corrupt)
 
-        si_s_16_X = SoftImpute(shrinkage_value=16).complete(X_corrupt)
-        scores['si_s_16'].append(evaluate(si_s_16_X, X))
+        mice_col_lambda_reg_10 = MICE(
+            model=BayesianRidgeRegression(lambda_reg=0.1).complete(X_corrupt))
+        scores['MICE_col_lambda_reg_10'] = evaluate(
+            mice_col_lambda_reg_10, X, X_corrupt)
 
-        si_s_32_X = SoftImpute(shrinkage_value=32).complete(X_corrupt)
-        scores['si_s_32'].append(evaluate(si_s_32_X, X))
+        mice_col_lambda_reg_1 = MICE(
+            model=BayesianRidgeRegression(lambda_reg=0.01).complete(X_corrupt))
+        scores['MICE_col_lambda_reg_1'] = evaluate(
+            mice_col_lambda_reg_1, X, X_corrupt)
 
-        si_s_64_X = SoftImpute(shrinkage_value=64).complete(X_corrupt)
-        scores['si_s_64'].append(evaluate(si_s_64_X, X))
+        mice_col_lambda_reg_01 = MICE(
+            model=BayesianRidgeRegression(lambda_reg=0.001).complete(X_corrupt))
+        scores['MICE_col_lambda_reg_01'] = evaluate(
+            mice_col_lambda_reg_01, X, X_corrupt)
 
-        si_s_128_X = SoftImpute(shrinkage_value=128).complete(X_corrupt)
-        scores['si_s_128'].append(evaluate(si_s_128_X, X))
+        mice_col_lambda_reg_001 = MICE(
+            model=BayesianRidgeRegression(lambda_reg=0.0001).complete(X_corrupt))
+        scores['MICE_col_lambda_reg_001'] = evaluate(
+            mice_col_lambda_reg_001, X, X_corrupt)
 
-        # pkl.dump(scores, open('./output/sweeps/base_scores_' + name +
-        #                       '_' + str(patients) + '.p', 'w'))
+        mice_pmm_X = MICE(impute_type='pmm').complete(X_corrupt)
+        scores['MICE_pmm'] = evaluate(mice_pmm_X, X, X_corrupt)
+
+        mice_pmm_lambda_reg_25 = MICE(
+            impute_type='pmm',
+            model=BayesianRidgeRegression(lambda_reg=0.25).complete(X_corrupt))
+        scores['MICE_pmm_lambda_reg_25'] = evaluate(
+            mice_pmm_lambda_reg_25, X, X_corrupt)
+
+        mice_pmm_lambda_reg_10 = MICE(
+            impute_type='pmm',
+            model=BayesianRidgeRegression(lambda_reg=0.1).complete(X_corrupt))
+        scores['MICE_pmm_lambda_reg_10'] = evaluate(
+            mice_pmm_lambda_reg_10, X, X_corrupt)
+
+        mice_pmm_lambda_reg_1 = MICE(
+            impute_type='pmm',
+             model=BayesianRidgeRegression(lambda_reg=0.01).complete(X_corrupt))
+        scores['MICE_pmm_lambda_reg_1'] = evaluate(mice_pmm_lambda_reg_1, X, X_corrupt)
+
+        mice_pmm_lambda_reg_01 = MICE(
+            impute_type='pmm',
+            model=BayesianRidgeRegression(lambda_reg=0.001).complete(X_corrupt))
+        scores['MICE_pmm_lambda_reg_01'] = evaluate(mice_pmm_lambda_reg_01, X, X_corrupt)
+
+        mice_pmm_lambda_reg_001 = MICE(
+            impute_type='pmm',
+            model=BayesianRidgeRegression(lambda_reg=0.0001).complete(X_corrupt))
+        scores['MICE_pmm_lambda_reg_001'] = evaluate(
+            mice_pmm_lambda_reg_001, X, X_corrupt)
+
+        matrix_fact_X = MatrixFactorization().complete(X_corrupt)
+        scores['MatrixFactor'] = evaluate(matrix_fact_X, X, X_corrupt)
+
+        knn_1_X = KNN(k=1).complete(X_corrupt)
+        scores['knn_1'] = evaluate(knn_1_X, X, X_corrupt)
+
+        knn_3_X = KNN(k=3).complete(X_corrupt)
+        scores['knn_3'] = evaluate(knn_3_X, X, X_corrupt)
+
+        knn_9_X = KNN(k=9).complete(X_corrupt)
+        scores['knn_9'] = evaluate(knn_9_X, X, X_corrupt)
+
+        knn_15_X = KNN(k=15).complete(X_corrupt)
+        scores['knn_15'] = evaluate(knn_15_X, X, X_corrupt)
+
+        knn_30_X = KNN(k=30).complete(X_corrupt)
+        scores['knn_30'] = evaluate(knn_30_X, X, X_corrupt)
+
+        knn_81_X = KNN(k=81).complete(X_corrupt)
+        scores['knn_81'] = evaluate(knn_81_X, X, X_corrupt)
+
+        knn_243_X = KNN(k=243).complete(X_corrupt)
+        scores['knn_243'] = evaluate(knn_243_X, X, X_corrupt)
+
+        knn_751_X = KNN(k=751).complete(X_corrupt)
+        scores['knn_751'] = evaluate(knn_751_X, X, X_corrupt)
+
+        knn_2000_X = KNN(k=2000).complete(X_corrupt)
+        scores['knn_2000'] = evaluate(knn_2000_X, X, X_corrupt)
+
+        knn_6000_X = KNN(k=6000).complete(X_corrupt)
+        scores['knn_6000'] = evaluate(knn_6000_X, X, X_corrupt)
 
         if save_imputed:
-            np.savetxt('./output/sweeps/' + name + '_simple_mean.csv',
-                       simple_mean_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps/' + name + '_simple_median.csv',
-                       simple_median_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps/' + name + '_simple_random.csv',
-                       random_X, delimiter=',', newline='\n'),
-            np.savetxt('./output/sweeps/' + name + '_svd_1.csv',
-                       svd_1_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps/' + name + '_svd_2.csv',
-                       svd_2_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps/' + name + '_svd_3.csv',
-                       svd_3_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps/' + name + '_svd_4.csv',
-                       svd_4_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps/' + name + '_svd_5.csv',
-                       svd_5_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps/' + name + '_svd_6.csv',
-                       svd_6_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps/' + name + '_svd_7.csv',
-                       svd_7_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps/' + name + '_svd_8.csv',
-                       svd_8_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps/' + name + '_svd_9.csv',
-                       svd_9_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps/' + name + '_svd_10.csv',
-                       svd_10_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps/' + name + '_svd_11.csv',
-                       svd_11_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps/' + name + '_svd_12.csv',
-                       svd_12_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps/' + name + '_svd_13.csv',
-                       svd_13_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps/' + name + '_svd_14.csv',
-                       svd_14_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps/' + name + '_svd_15.csv',
-                       svd_15_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps/' + name + '_svd_16.csv',
-                       svd_16_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps/' + name + '_svd_17.csv',
-                       svd_17_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps/' + name + '_svd_18.csv',
-                       svd_18_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps/' + name + '_svd_19.csv',
-                       svd_19_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps/' + name + '_svd_20.csv',
-                       svd_20_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps/' + name + '_svd_21.csv',
-                       svd_21_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps/' + name + '_svd_22.csv',
-                       svd_22_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps/' + name + '_svd_23.csv',
-                       svd_23_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps/' + name + '_svd_24.csv',
-                       svd_24_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps/' + name + '_si.csv',
-                       si_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps/' + name + '_si_s_half.csv',
-                       si_s_half_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps/' + name + '_si_s_1.csv',
-                       si_s_1_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps/' + name + '_si_s_2.csv',
-                       si_s_2_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps/' + name + '_si_s_4.csv',
-                       si_s_4_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps/' + name + '_si_s_8.csv',
-                       si_s_8_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps/' + name + '_si_s_16.csv',
-                       si_s_16_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps/' + name + '_si_s_32.csv',
-                       si_s_32_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps/' + name + '_si_s_64.csv',
-                       si_s_64_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps/' + name + '_si_s_128.csv',
-                       si_s_128_X, delimiter=',', newline='\n')
-
-        if run_all:
-            mice_X = MICE().complete(X_corrupt)
-            scores['MICE'].append(evaluate(mice_X, X))
-
-            mice_col_lambda_reg_25 = MICE(model=BayesianRidgeRegression(lambda_reg=0.25)).complete(X_corrupt)
-            scores['MICE_col_lambda_reg_25'].append(evaluate(mice_col_lambda_reg_25, X))
-
-            mice_col_lambda_reg_10 = MICE(model=BayesianRidgeRegression(lambda_reg=0.1)).complete(X_corrupt)
-            scores['MICE_col_lambda_reg_10'].append(evaluate(mice_col_lambda_reg_10, X))
-
-            mice_col_lambda_reg_1 = MICE(model=BayesianRidgeRegression(lambda_reg=0.01)).complete(X_corrupt)
-            scores['MICE_col_lambda_reg_1'].append(evaluate(mice_col_lambda_reg_1, X))
-
-            mice_col_lambda_reg_01 = MICE(model=BayesianRidgeRegression(lambda_reg=0.001)).complete(X_corrupt)
-            scores['MICE_col_lambda_reg_01'].append(evaluate(mice_col_lambda_reg_01, X))
-
-            mice_col_lambda_reg_001 = MICE(model=BayesianRidgeRegression(lambda_reg=0.0001)).complete(X_corrupt)
-            scores['MICE_col_lambda_reg_001'].append(evaluate(mice_col_lambda_reg_001, X))
-
-            mice_pmm_X = MICE(impute_type='pmm').complete(X_corrupt)
-            scores['MICE_pmm'].append(evaluate(mice_pmm_X, X))
-
-            mice_pmm_lambda_reg_25 = MICE(impute_type='pmm',
-                                          model=BayesianRidgeRegression(lambda_reg=0.25)).complete(X_corrupt)
-            scores['MICE_pmm_lambda_reg_25'].append(evaluate(mice_pmm_lambda_reg_25, X))
-
-            mice_pmm_lambda_reg_10 = MICE(impute_type='pmm',
-                                          model=BayesianRidgeRegression(lambda_reg=0.1)).complete(X_corrupt)
-            scores['MICE_pmm_lambda_reg_10'].append(evaluate(mice_pmm_lambda_reg_10, X))
-
-            mice_pmm_lambda_reg_1 = MICE(impute_type='pmm',
-                                         model=BayesianRidgeRegression(lambda_reg=0.01)).complete(X_corrupt)
-            scores['MICE_pmm_lambda_reg_1'].append(evaluate(mice_pmm_lambda_reg_1, X))
-
-            mice_pmm_lambda_reg_01 = MICE(impute_type='pmm',
-                                          model=BayesianRidgeRegression(lambda_reg=0.001)).complete(X_corrupt)
-            scores['MICE_pmm_lambda_reg_01'].append(evaluate(mice_pmm_lambda_reg_01, X))
-
-            mice_pmm_lambda_reg_001 = MICE(impute_type='pmm',
-                                           model=BayesianRidgeRegression(lambda_reg=0.0001)).complete(X_corrupt)
-            scores['MICE_pmm_lambda_reg_001'].append(evaluate(mice_pmm_lambda_reg_001, X))
-
-
-            matrix_fact_X = MatrixFactorization().complete(X_corrupt)
-            scores['MatrixFactor'].append(evaluate(matrix_fact_X, X))
-
-            #nnm_X = NuclearNormMinimization().complete(X_corrupt)
-            #scores['NuclearMin'].append(evaluate(nnm_X, X))
-
-            knn_1_X = KNN(k=1).complete(X_corrupt)
-            scores['knn_1'].append(evaluate(knn_1_X, X))
-
-            knn_3_X = KNN(k=3).complete(X_corrupt)
-            scores['knn_3'].append(evaluate(knn_3_X, X))
-
-            knn_9_X = KNN(k=9).complete(X_corrupt)
-            scores['knn_9'].append(evaluate(knn_9_X, X))
-
-            knn_15_X = KNN(k=15).complete(X_corrupt)
-            scores['knn_15'].append(evaluate(knn_15_X, X))
-
-            knn_30_X = KNN(k=30).complete(X_corrupt)
-            scores['knn_30'].append(evaluate(knn_30_X, X))
-
-            knn_81_X = KNN(k=81).complete(X_corrupt)
-            scores['knn_81'].append(evaluate(knn_81_X, X))
-
-            knn_243_X = KNN(k=243).complete(X_corrupt)
-            scores['knn_243'].append(evaluate(knn_243_X, X))
-
-            knn_751_X = KNN(k=751).complete(X_corrupt)
-            scores['knn_751'].append(evaluate(knn_751_X, X))
-
-            knn_2000_X = KNN(k=2000).complete(X_corrupt)
-            scores['knn_2000'].append(evaluate(knn_2000_X, X))
-
-            knn_6000_X = KNN(k=6000).complete(X_corrupt)
-            scores['knn_6000'].append(evaluate(knn_6000_X, X))
-
-            if save_imputed:
-                np.savetxt('./output/sweeps/' + name + '_MICE.csv',
-                           mice_X, delimiter=',', newline='\n')
-                np.savetxt('./output/sweeps/' + name +
-                           '_mice_col_lambda_reg_25.csv',
-                           mice_col_lambda_reg_25, delimiter=',', newline='\n')
-                np.savetxt('./output/sweeps/' + name + '_mice_col_lambda_reg_10.csv',
-                           mice_col_lambda_reg_10, delimiter=',', newline='\n')
-                np.savetxt('./output/sweeps/' + name + '_mice_col_lambda_reg_1.csv',
-                           mice_col_lambda_reg_1, delimiter=',', newline='\n')
-                np.savetxt('./output/sweeps/' + name + '_mice_col_lambda_reg_01.csv',
-                           mice_col_lambda_reg_01, delimiter=',', newline='\n')
-                np.savetxt('./output/sweeps/' + name + '_mice_col_lambda_reg_001.csv',
-                           mice_col_lambda_reg_001, delimiter=',', newline='\n')
-                np.savetxt('./output/sweeps/' + name + '_mice_pmm_X.csv',
-                           mice_pmm_X, delimiter=',', newline='\n')
-                np.savetxt('./output/sweeps/' + name + '_mice_pmm_lambda_reg_25.csv',
-                           mice_pmm_lambda_reg_25, delimiter=',', newline='\n')
-                np.savetxt('./output/sweeps/' + name + '_mice_pmm_lambda_reg_10.csv',
-                           mice_pmm_lambda_reg_10, delimiter=',', newline='\n')
-                np.savetxt('./output/sweeps/' + name + '_mice_pmm_lambda_reg_1.csv',
-                           mice_pmm_lambda_reg_1, delimiter=',', newline='\n')
-                np.savetxt('./output/sweeps/' + name + '_mice_pmm_lambda_reg_01.csv',
-                           mice_pmm_lambda_reg_01, delimiter=',', newline='\n')
-                np.savetxt('./output/sweeps/' + name + '_mice_pmm_lambda_reg_001.csv',
-                           mice_pmm_lambda_reg_001, delimiter=',', newline='\n')
-                np.savetxt('./output/sweeps/' + name + '_matrix_fact.csv',
-                           matrix_fact_X, delimiter=',', newline='\n')
-                np.savetxt('./output/sweeps/' + name + '_knn_1.csv',
-                           knn_1_X, delimiter=',', newline='\n')
-                np.savetxt('./output/sweeps/' + name + '_knn_3.csv',
-                           knn_3_X, delimiter=',', newline='\n')
-                np.savetxt('./output/sweeps/' + name + '_knn_9.csv',
-                           knn_9_X, delimiter=',', newline='\n')
-                np.savetxt('./output/sweeps/' + name + '_knn_15.csv',
-                           knn_15_X, delimiter=',', newline='\n')
-                np.savetxt('./output/sweeps/' + name + '_knn_30.csv',
-                           knn_30_X, delimiter=',', newline='\n')
-                np.savetxt('./output/sweeps/' + name + '_knn_81.csv',
-                           knn_81_X, delimiter=',', newline='\n')
-                np.savetxt('./output/sweeps/' + name + '_knn_243.csv',
-                           knn_243_X, delimiter=',', newline='\n')
-                np.savetxt('./output/sweeps/' + name + '_knn_751.csv',
-                           knn_751_X, delimiter=',', newline='\n')
-                np.savetxt('./output/sweeps/' + name + '_knn_2000.csv',
-                           knn_2000_X, delimiter=',', newline='\n')
-                np.savetxt('./output/sweeps/' + name + 'knn_6000.csv',
-                           knn_6000_X, delimiter=',', newline='\n')
-
+            np.savetxt('./output/sweeps/' + name + '_MICE.csv',
+                       mice_X, delimiter=',', newline='\n')
+            np.savetxt('./output/sweeps/' + name +
+                       '_mice_col_lambda_reg_25.csv',
+                       mice_col_lambda_reg_25, delimiter=',', newline='\n')
+            np.savetxt('./output/sweeps/' + name + '_mice_col_lambda_reg_10.csv',
+                       mice_col_lambda_reg_10, delimiter=',', newline='\n')
+            np.savetxt('./output/sweeps/' + name + '_mice_col_lambda_reg_1.csv',
+                       mice_col_lambda_reg_1, delimiter=',', newline='\n')
+            np.savetxt('./output/sweeps/' + name + '_mice_col_lambda_reg_01.csv',
+                       mice_col_lambda_reg_01, delimiter=',', newline='\n')
+            np.savetxt('./output/sweeps/' + name + '_mice_col_lambda_reg_001.csv',
+                       mice_col_lambda_reg_001, delimiter=',', newline='\n')
+            np.savetxt('./output/sweeps/' + name + '_mice_pmm_X.csv',
+                       mice_pmm_X, delimiter=',', newline='\n')
+            np.savetxt('./output/sweeps/' + name + '_mice_pmm_lambda_reg_25.csv',
+                       mice_pmm_lambda_reg_25, delimiter=',', newline='\n')
+            np.savetxt('./output/sweeps/' + name + '_mice_pmm_lambda_reg_10.csv',
+                       mice_pmm_lambda_reg_10, delimiter=',', newline='\n')
+            np.savetxt('./output/sweeps/' + name + '_mice_pmm_lambda_reg_1.csv',
+                       mice_pmm_lambda_reg_1, delimiter=',', newline='\n')
+            np.savetxt('./output/sweeps/' + name + '_mice_pmm_lambda_reg_01.csv',
+                       mice_pmm_lambda_reg_01, delimiter=',', newline='\n')
+            np.savetxt('./output/sweeps/' + name + '_mice_pmm_lambda_reg_001.csv',
+                       mice_pmm_lambda_reg_001, delimiter=',', newline='\n')
+            np.savetxt('./output/sweeps/' + name + '_matrix_fact.csv',
+                       matrix_fact_X, delimiter=',', newline='\n')
+            np.savetxt('./output/sweeps/' + name + '_knn_1.csv',
+                       knn_1_X, delimiter=',', newline='\n')
+            np.savetxt('./output/sweeps/' + name + '_knn_3.csv',
+                       knn_3_X, delimiter=',', newline='\n')
+            np.savetxt('./output/sweeps/' + name + '_knn_9.csv',
+                       knn_9_X, delimiter=',', newline='\n')
+            np.savetxt('./output/sweeps/' + name + '_knn_15.csv',
+                       knn_15_X, delimiter=',', newline='\n')
+            np.savetxt('./output/sweeps/' + name + '_knn_30.csv',
+                       knn_30_X, delimiter=',', newline='\n')
+            np.savetxt('./output/sweeps/' + name + '_knn_81.csv',
+                       knn_81_X, delimiter=',', newline='\n')
+            np.savetxt('./output/sweeps/' + name + '_knn_243.csv',
+                       knn_243_X, delimiter=',', newline='\n')
+            np.savetxt('./output/sweeps/' + name + '_knn_751.csv',
+                       knn_751_X, delimiter=',', newline='\n')
+            np.savetxt('./output/sweeps/' + name + '_knn_2000.csv',
+                       knn_2000_X, delimiter=',', newline='\n')
+            np.savetxt('./output/sweeps/' + name + 'knn_6000.csv',
+                       knn_6000_X, delimiter=',', newline='\n')
     print(scores)
-    np.savetxt('./output/scores/' + name + '.csv', scores, delimiter='',
-               newline='\n')
+    scores_df = pd.DataFrame().from_dict(scores.items())
+    scores_df.columns = ['Method', 'Score']
+    scores_df.set_index('Method')
+    scores_df.to_csv('./output/scores/' + name + '.csv')
 
 
-def evaluate(X, X_imputed, method='mse'):
-    if method == 'mse':
-        # this works as long as no nan in X...
+def evaluate(X_imputed, X, X_corrupt, method='rmse'):
+    if method == 'rmse':
+        impute_count = np.count_nonzero(np.isnan(X_corrupt))
         X = np.nan_to_num(X)
         X_imputed = np.nan_to_num(X_imputed)
-        mse = ((X - X_imputed) ** 2).mean(axis=None)
-        return mse
+
+        rmse = math.sqrt(((X - X_imputed) ** 2).sum(axis=None)/impute_count)
+        return rmse
 
 
-def load_file(name):
+def load_file(folder, name):
     print(name)
-    f = h5py.File('./data/spikein/' + name, 'r')
-    X = f['dataset'][:]
+    X = np.genfromtxt('./data/spikeincsv/' + folder + '/' + name,
+                      delimiter=',')
     print(X.shape)
     return X
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
+    parser.add_argument("--folder", type=str)
     parser.add_argument("--name", type=str)
     parser.add_argument("--patients", type=int)
     parser.add_argument("--run_all", type=int, default=0)
@@ -408,4 +391,4 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     args.name = args.name.split('/')[-1]
-    run(args.name, args.patients, args.run_all, args.save_imputed)
+    run(args.folder, args.name, args.patients, args.run_all, args.save_imputed)
