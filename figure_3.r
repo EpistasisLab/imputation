@@ -1,17 +1,19 @@
 library(reshape2)
 library(ggplot2)
 library(gridExtra)
-library(devtools)
-library(helpRFunctions)
-library(gridExtra)
+#
 
-# setwd('/home/brett/code/imputation/')
-setwd('/Users/brett/code/imputation/')
+setwd('/home/brett/code/imputation/')
+#setwd('/Users/brett/code/imputation/')
 
 # MCAR
 mcar_scores <- read.csv('./output/imputation_scores/mcar.csv')
 print(dim(mcar_scores))
-mcar_scores[,'MSE'] <- sqrt(mcar_scores[,'MSE'])
+
+#mcar_scores[,'MSE'] <- sqrt(mcar_scores[,'MSE'] * (1/mcar_scores[,'Percent.Missing']))
+#mcar_scores[,'MSE'] <- sqrt(mcar_scores[,'MSE'])
+#mcar_r_scores <- read.csv('./output/')
+
 
 spikein <- c(0.1, 0.2, 0.3, 0.4, 0.5)
 
@@ -146,6 +148,17 @@ svd1 = ggplot(svd_subset, aes(x=Method, y=MSE)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
+
+si_subset <- subset(svd_scores, Percent.Missing==0.1)
+svd1 = ggplot(svd_subset, aes(x=Method, y=MSE)) +
+  geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
+  labs(title = "A. 0.1", y="RMSE", x="Rank") +
+  scale_x_discrete(labels=svd_labels) + 
+  theme_bw() +
+  theme(legend.position="none", 
+        axis.text.x = element_text(angle = 90, hjust = 1))
+
+
 
 # MCAR
 mcar_scores<-read.csv('./output/imputation_scores/mcar.csv')
