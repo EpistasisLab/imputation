@@ -32,7 +32,7 @@ def build_jobs(folder_name):
                          ' --run_all 1 --save_imputed 0 \n')
 
             # R Run - break out for simple_median
-            f_split2 = 'R_' + fsplit
+            f_split2 = 'R_' + f_split
             file_name2 = f_split2 + '.sh'
             print(file_name2)
 
