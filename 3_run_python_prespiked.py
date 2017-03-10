@@ -8,8 +8,7 @@ import pandas as pd
 from sklearn.preprocessing import Imputer
 from fancyimpute import (SimpleFill, KNN, SoftImpute, IterativeSVD,
                          MICE, MatrixFactorization,
-                         NuclearNormMinimization, BiScaler,
-                         AutoEncoder)
+                         NuclearNormMinimization, BiScaler)
 from fancyimpute.bayesian_ridge_regression import BayesianRidgeRegression
 
 
