@@ -19,7 +19,7 @@ def build_jobs(folder_name):
 
             # SAVE fULL IMPUTED VALUES OF FIRST RUN ONLY
             if i == 0:
-                f1.write('module load python \n')
+                f1.write('module load python/2.7.10 \n')
                 f1.write('python 3_run_python_prespiked.py --folder' +
                          folder_name + ' --name ' + file_name +
                          ' --run_all 1 --save_imputed 1 \n')
@@ -27,7 +27,7 @@ def build_jobs(folder_name):
                 f1.write('Rscript 3_run_r_prespiked.R ' + folder_name + ' ' +
                          f_split + ' 1 \n')
             else:
-                f1.write('module load python \n')
+                f1.write('module load python/2.7.10 \n')
                 f1.write('python 3_run_python_prespiked.py --folder' +
                          folder_name + ' --name ' + file_name +
                          ' --run_all 1 --save_imputed 1 \n')
