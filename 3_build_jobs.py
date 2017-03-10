@@ -22,12 +22,12 @@ def build_jobs(folder_name):
             # SAVE fULL IMPUTED VALUES OF FIRST RUN ONLY
             if i == 0:
                 f1.write('module load python/2.7.10 \n')
-                f1.write('python 3_run_python_prespiked.py --folder' +
+                f1.write('python 3_run_python_prespiked.py --folder ' +
                          folder_name + ' --name ' + file_name +
                          ' --run_all 1 --save_imputed 1 \n')
             else:
                 f1.write('module load python/2.7.10 \n')
-                f1.write('python 3_run_python_prespiked.py --folder' +
+                f1.write('python 3_run_python_prespiked.py --folder ' +
                          folder_name + ' --name ' + file_name +
                          ' --run_all 1 --save_imputed 0 \n')
 
