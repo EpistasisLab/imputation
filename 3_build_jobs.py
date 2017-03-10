@@ -23,12 +23,12 @@ def build_jobs(folder_name):
             if i == 0:
                 f1.write('module load python/2.7.10 \n')
                 f1.write('python 3_run_python_prespiked.py --folder ' +
-                         folder_name + ' --name ' + file_name +
+                         folder_name + ' --name ' + f +
                          ' --run_all 1 --save_imputed 1 \n')
             else:
                 f1.write('module load python/2.7.10 \n')
                 f1.write('python 3_run_python_prespiked.py --folder ' +
-                         folder_name + ' --name ' + file_name +
+                         folder_name + ' --name ' + f +
                          ' --run_all 1 --save_imputed 0 \n')
 
             # R Run - break out for simple_median
