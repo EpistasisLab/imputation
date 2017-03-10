@@ -13,8 +13,10 @@ def build_jobs(folder_name):
             f1 = open('./jobs/' + folder + '/' + file_name, 'w+')
             f1.write('#!/bin/bash \n')
             f1.write('#BSUB -J ' + f_split + '\n')
-            f1.write('#BSUB -o ./job_out/' + f_split + '.%J.out' + '\n')
-            f1.write('#BSUB -e ./job_out/' + f_split + '.%J.error' + '\n')
+            f1.write('#BSUB -o ./' + folder + '/job_out/' + f_split +
+                     '.%J.out' + '\n')
+            f1.write('#BSUB -e ./' + folder + '/job_out/' + f_split +
+                     '.%J.error' + '\n')
             f1.write('\n')
 
             # SAVE fULL IMPUTED VALUES OF FIRST RUN ONLY
