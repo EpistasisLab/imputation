@@ -220,27 +220,27 @@ def run(folder, name, patients, run_all, save_imputed):
         scores['MICE'] = evaluate(mice_X, X, X_corrupt)
 
         mice_col_lambda_reg_25 = MICE(
-            model=BayesianRidgeRegression(lambda_reg=0.25).complete(X_corrupt))
+            model=BayesianRidgeRegression(lambda_reg=0.25)).complete(X_corrupt)
         scores['MICE_col_lambda_reg_25'] = evaluate(
             mice_col_lambda_reg_25, X, X_corrupt)
 
         mice_col_lambda_reg_10 = MICE(
-            model=BayesianRidgeRegression(lambda_reg=0.1).complete(X_corrupt))
+            model=BayesianRidgeRegression(lambda_reg=0.1)).complete(X_corrupt)
         scores['MICE_col_lambda_reg_10'] = evaluate(
             mice_col_lambda_reg_10, X, X_corrupt)
 
         mice_col_lambda_reg_1 = MICE(
-            model=BayesianRidgeRegression(lambda_reg=0.01).complete(X_corrupt))
+            model=BayesianRidgeRegression(lambda_reg=0.01)).complete(X_corrupt)
         scores['MICE_col_lambda_reg_1'] = evaluate(
             mice_col_lambda_reg_1, X, X_corrupt)
 
         mice_col_lambda_reg_01 = MICE(
-            model=BayesianRidgeRegression(lambda_reg=0.001).complete(X_corrupt))
+            model=BayesianRidgeRegression(lambda_reg=0.001)).complete(X_corrupt)
         scores['MICE_col_lambda_reg_01'] = evaluate(
             mice_col_lambda_reg_01, X, X_corrupt)
 
         mice_col_lambda_reg_001 = MICE(
-            model=BayesianRidgeRegression(lambda_reg=0.0001).complete(X_corrupt))
+            model=BayesianRidgeRegression(lambda_reg=0.0001)).complete(X_corrupt)
         scores['MICE_col_lambda_reg_001'] = evaluate(
             mice_col_lambda_reg_001, X, X_corrupt)
 
@@ -249,29 +249,29 @@ def run(folder, name, patients, run_all, save_imputed):
 
         mice_pmm_lambda_reg_25 = MICE(
             impute_type='pmm',
-            model=BayesianRidgeRegression(lambda_reg=0.25).complete(X_corrupt))
+            model=BayesianRidgeRegression(lambda_reg=0.25)).complete(X_corrupt)
         scores['MICE_pmm_lambda_reg_25'] = evaluate(
             mice_pmm_lambda_reg_25, X, X_corrupt)
 
         mice_pmm_lambda_reg_10 = MICE(
             impute_type='pmm',
-            model=BayesianRidgeRegression(lambda_reg=0.1).complete(X_corrupt))
+            model=BayesianRidgeRegression(lambda_reg=0.1)).complete(X_corrupt)
         scores['MICE_pmm_lambda_reg_10'] = evaluate(
             mice_pmm_lambda_reg_10, X, X_corrupt)
 
         mice_pmm_lambda_reg_1 = MICE(
             impute_type='pmm',
-             model=BayesianRidgeRegression(lambda_reg=0.01).complete(X_corrupt))
+             model=BayesianRidgeRegression(lambda_reg=0.01)).complete(X_corrupt)
         scores['MICE_pmm_lambda_reg_1'] = evaluate(mice_pmm_lambda_reg_1, X, X_corrupt)
 
         mice_pmm_lambda_reg_01 = MICE(
             impute_type='pmm',
-            model=BayesianRidgeRegression(lambda_reg=0.001).complete(X_corrupt))
+            model=BayesianRidgeRegression(lambda_reg=0.001)).complete(X_corrupt)
         scores['MICE_pmm_lambda_reg_01'] = evaluate(mice_pmm_lambda_reg_01, X, X_corrupt)
 
         mice_pmm_lambda_reg_001 = MICE(
             impute_type='pmm',
-            model=BayesianRidgeRegression(lambda_reg=0.0001).complete(X_corrupt))
+            model=BayesianRidgeRegression(lambda_reg=0.0001)).complete(X_corrupt)
         scores['MICE_pmm_lambda_reg_001'] = evaluate(
             mice_pmm_lambda_reg_001, X, X_corrupt)
 
