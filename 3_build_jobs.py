@@ -10,7 +10,7 @@ def build_jobs(folder_name):
             file_name = f_split + '.sh'
             print(file_name)
 
-            f1 = open('./jobs/' + file_name, 'w+')
+            f1 = open('./jobs/' + folder + '/' + file_name, 'w+')
             f1.write('#!/bin/bash \n')
             f1.write('#BSUB -J ' + f_split + '\n')
             f1.write('#BSUB -o ./job_out/' + f_split + '.%J.out' + '\n')
