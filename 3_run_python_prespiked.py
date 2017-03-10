@@ -354,7 +354,7 @@ def run(folder, name, patients, run_all, save_imputed):
     scores_df = pd.DataFrame().from_dict(scores.items())
     scores_df.columns = ['Method', 'Score']
     scores_df.set_index('Method')
-    scores_df.to_csv('./output/scores/' + name + '.csv')
+    scores_df.to_csv('./output/scores/' + folder + '/' + name + '.csv')
 
 
 def evaluate(X_imputed, X, X_corrupt, method='rmse'):

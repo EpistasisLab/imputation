@@ -2,8 +2,7 @@ library(mice)
 library(randomForest)
 library(reshape2)
 
-args = c('TEST', 'TEST_0.1', 0)
-#args = commandArgs(trailingOnly=TRUE)
+args = commandArgs(trailingOnly=TRUE)
 print(args[1])
 print(args[2])
 print(args[3])
@@ -45,7 +44,7 @@ for(i in 1:length(impMethod)){
 }
 Sys.time()-tic
 
-file_name <- paste('./output/scores/R_', args[2], '.csv', sep='')
+file_name <- paste('./output/scores/', args[1],'R_', args[2], '.csv', sep='')
 print(file_name)
 eval.df <- data.frame(matrix(unlist(eval_list)))
 rownames(eval.df) <- impMethod
