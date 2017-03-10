@@ -369,7 +369,8 @@ def evaluate(X_imputed, X, X_corrupt, method='rmse'):
         X = np.nan_to_num(X)
         X_imputed = np.nan_to_num(X_imputed)
 
-        rmse = math.sqrt(((X - X_imputed) ** 2).sum(axis=None)/impute_count)
+        #rmse = math.sqrt(((X - X_imputed) ** 2).sum(axis=None)/impute_count)
+        rmse = math.sqrt(((X - X_imputed) ** 2).mean(axis=None))
         return rmse
 
 
