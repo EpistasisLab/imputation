@@ -23,16 +23,31 @@ def build_jobs(folder_name):
                 f1.write('python 3_run_python_prespiked.py --folder' +
                          folder_name + ' --name ' + file_name +
                          ' --run_all 1 --save_imputed 1 \n')
-                f1.write('module load R \n')
-                f1.write('Rscript 3_run_r_prespiked.R ' + folder_name + ' ' +
-                         f_split + ' 1 \n')
             else:
                 f1.write('module load python/2.7.10 \n')
                 f1.write('python 3_run_python_prespiked.py --folder' +
                          folder_name + ' --name ' + file_name +
-                         ' --run_all 1 --save_imputed 1 \n')
-                f1.write('module load R \n')
-                f1.write('Rscript 3_run_r_prespiked.R ' + folder_name + ' ' +
+                         ' --run_all 1 --save_imputed 0 \n')
+
+            # R Run - break out for simple_median
+            f_split2 = 'R_' + fsplit
+            file_name2 = f_split2 + '.sh'
+            print(file_name2)
+
+            f2 = open('./jobs/' + file_name2, 'w+')
+            f2.write('#!/bin/bash \n')
+            f2.write('#BSUB -J ' + f_split2 + '\n')
+            f2.write('#BSUB -o ./job_out/' + f_split2 + '.%J.out' + '\n')
+            f2.write('#BSUB -e ./job_out/' + f_split2 + '.%J.error' + '\n')
+            f2.write('\n')
+
+            if i == 0:
+                f2.write('module load R \n')
+                f2.write('Rscript 3_run_r_prespiked.R ' + folder_name + ' ' +
+                         f_split + ' 1 \n')
+            else:
+                f2.write('module load R \n')
+                f2.write('Rscript 3_run_r_prespiked.R ' + folder_name + ' ' +
                          f_split + ' 0 \n')
             i += 1
 
