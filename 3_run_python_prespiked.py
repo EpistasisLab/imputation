@@ -274,9 +274,6 @@ def run(folder, name, patients, run_all, save_imputed):
         scores['MICE_pmm_lambda_reg_001'] = evaluate(
             mice_pmm_lambda_reg_001, X, X_corrupt)
 
-        matrix_fact_X = MatrixFactorization().complete(X_corrupt)
-        scores['MatrixFactor'] = evaluate(matrix_fact_X, X, X_corrupt)
-
         knn_1_X = KNN(k=1).complete(X_corrupt)
         scores['knn_1'] = evaluate(knn_1_X, X, X_corrupt)
 
@@ -333,8 +330,6 @@ def run(folder, name, patients, run_all, save_imputed):
                        mice_pmm_lambda_reg_01, delimiter=',', newline='\n')
             np.savetxt('./output/sweeps/' + name + '_mice_pmm_lambda_reg_001.csv',
                        mice_pmm_lambda_reg_001, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps/' + name + '_matrix_fact.csv',
-                       matrix_fact_X, delimiter=',', newline='\n')
             np.savetxt('./output/sweeps/' + name + '_knn_1.csv',
                        knn_1_X, delimiter=',', newline='\n')
             np.savetxt('./output/sweeps/' + name + '_knn_3.csv',
