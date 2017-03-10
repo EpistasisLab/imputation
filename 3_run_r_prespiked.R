@@ -44,7 +44,7 @@ for(i in 1:length(impMethod)){
 }
 Sys.time()-tic
 
-file_name <- paste('./output/scores/', args[1],'R_', args[2], '.csv', sep='')
+file_name <- paste('./output/scores/', args[1],'/R_', args[2], '.csv', sep='')
 print(file_name)
 eval.df <- data.frame(matrix(unlist(eval_list)))
 rownames(eval.df) <- impMethod
