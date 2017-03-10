@@ -13,10 +13,10 @@ def build_jobs(folder_name):
             f1 = open('./jobs/' + folder_name + '/' + file_name, 'w+')
             f1.write('#!/bin/bash \n')
             f1.write('#BSUB -J ' + f_split + '\n')
-            f1.write('#BSUB -o ./' + folder_name + '/job_out/' + f_split +
-                     '.%J.out' + '\n')
-            f1.write('#BSUB -e ./' + folder_name + '/job_out/' + f_split +
-                     '.%J.error' + '\n')
+            f1.write('#BSUB -o ./job_out/' + folder_name + '/' +
+                     f_split + '.%J.out' + '\n')
+            f1.write('#BSUB -e ./job_out/' + folder_name + '/' +
+                     f_split + '.%J.error' + '\n')
             f1.write('\n')
 
             # SAVE fULL IMPUTED VALUES OF FIRST RUN ONLY
@@ -39,9 +39,9 @@ def build_jobs(folder_name):
             f2 = open('./jobs/' + folder_name + '/' + file_name2, 'w+')
             f2.write('#!/bin/bash \n')
             f2.write('#BSUB -J ' + f_split2 + '\n')
-            f2.write('#BSUB -o ./' + folder_name + '/job_out/' + f_split2 +
+            f2.write('#BSUB -o ./job_out/' + folder_name + '/' + f_split2 +
                      '.%J.out' + '\n')
-            f2.write('#BSUB -e ./' + folder_name + '/job_out/' + f_split2 +
+            f2.write('#BSUB -e ./job_out/' + folder_name + '/' + f_split2 +
                      '.%J.error' + '\n')
             f2.write('\n')
 
