@@ -114,7 +114,7 @@ svd3 = ggplot(svd_subset, aes(x=Method, y=MSE)) +
 svd_subset <- subset(svd_scores, Percent.Missing==0.4)
 svd4 = ggplot(svd_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
-  labs(title = "A. 0.1", y="RMSE", x="Rank") +
+  labs(title = "D. 0.4", y="RMSE", x="Rank") +
   scale_x_discrete(labels=svd_labels) + 
   theme_bw() +
   theme(legend.position="none", 
@@ -123,7 +123,7 @@ svd4 = ggplot(svd_subset, aes(x=Method, y=MSE)) +
 svd_subset <- subset(svd_scores, Percent.Missing==0.5)
 svd5 = ggplot(svd_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
-  labs(title = "A. 0.1", y="RMSE", x="Rank") +
+  labs(title = "E. 0.5", y="RMSE", x="Rank") +
   scale_x_discrete(labels=svd_labels) + 
   theme_bw() +
   theme(legend.position="none", 

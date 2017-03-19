@@ -348,7 +348,7 @@ def run(folder, name, patients, run_all, save_imputed):
                        knn_751_X, delimiter=',', newline='\n')
             np.savetxt('./output/sweeps/' + name + '_knn_2000.csv',
                        knn_2000_X, delimiter=',', newline='\n')
-            np.savetxt('./output/sweeps/' + name + 'knn_6000.csv',
+            np.savetxt('./output/sweeps/' + name + '_knn_6000.csv',
                        knn_6000_X, delimiter=',', newline='\n')
     print(scores)
     scores_df = pd.DataFrame().from_dict(scores.items())
@@ -363,9 +363,9 @@ def evaluate(X_imputed, X, X_corrupt, method='rmse'):
         X = np.nan_to_num(X)
         X_imputed = np.nan_to_num(X_imputed)
 
-        #rmse = math.sqrt(((X - X_imputed) ** 2).sum(axis=None)/impute_count)
-        rmse = math.sqrt(((X - X_imputed) ** 2).mean(axis=None))
-        return rmse
+        feature_mse = math.sqrt(((X - X_imputed) ** 2).sum(axis=None)/impute_count)
+        #rmse = math.sqrt(((X - X_imputed) ** 2).mean(axis=None))
+        return feature_mse
 
 
 def load_file(folder, name):
