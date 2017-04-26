@@ -2,8 +2,8 @@ library(reshape2)
 library(ggplot2)
 library(gridExtra)
 
-setwd('/home/brett/code/imputation/')
-# setwd('/Users/brett/code/imputation/')
+#setwd('/home/brett/code/imputation/')
+setwd('/Users/brett/code/imputation/')
 
 # MCAR
 mcar_scores<-read.csv('./data/prediction_scores/mcar.csv')
@@ -16,7 +16,7 @@ colnames(mcar_df) <- c("Spikein", "ROC_AUC")
 
 twoA <- ggplot(mcar_df, aes(x=Spikein, y=ROC_AUC, color=Spikein)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
-  labs(title = "A.", y="ROC AUC", x="Spike-in Percentage")
+  labs(title = "A.", y="ROC AUC", x="Spike-in Percentage") + scale_y_continuous(limits = c(0.5, 1))
 
 # MAR
 mar_scores<-read.csv('./data/prediction_scores/mar.csv')
@@ -29,7 +29,7 @@ colnames(mar_df) <- c("Quartile", "ROC_AUC")
 
 twoB <- ggplot(mar_df, aes(x=Quartile, y=ROC_AUC, color=Quartile)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
-  labs(title="B.", y="ROC AUC", x="Quartile")
+  labs(title="B.", y="ROC AUC", x="Quartile") + scale_y_continuous(limits = c(0.5, 1))
 
 # MNAR
 mnar_scores<-read.csv('./data/prediction_scores/mnar.csv')
@@ -42,7 +42,7 @@ colnames(mnar_df) <- c("Quartile", "ROC_AUC")
 
 twoC <- ggplot(mnar_df, aes(x=Quartile, y=ROC_AUC, color=Quartile)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) + 
-  labs(title="C.", y="ROC AUC", x="Quartile")
+  labs(title="C.", y="ROC AUC", x="Quartile") + scale_y_continuous(limits = c(0.5, 1))
 
 # all labs
 all_lab_names <- c("10330-9", "10334-1", "10466-1", "10501-5", "10535-3", "10886-0", "11572-5",
@@ -69,8 +69,8 @@ colnames(scores) <- all_lab_names
 scores_df <- melt(scores)
 
 colnames(scores_df) <- c("Labs", "ROC_AUC")
-twoD = ggplot(scores_df, aes(x=Labs, y=ROC_AUC, color=Labs)) +
-  labs(title="D.") +
+twoD = ggplot(scores_df, aes(x=reorder(Labs, -ROC_AUC), y=ROC_AUC, color=Labs)) +
+  labs(title="D.", y="ROC AUC", x="Labs") +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) + 
   theme(legend.position="none",
         axis.text.x=element_blank(),
@@ -78,7 +78,7 @@ twoD = ggplot(scores_df, aes(x=Labs, y=ROC_AUC, color=Labs)) +
 
 scores_df_group <- scores_df
 scores_df_group$Labs = 1
-twoE = ggplot(scores_df_group, aes(x=Labs, y=ROC_AUC)) +
+twoE = ggplot(scores_df_group, aes(x=Labs, y=ROC_AUC, ordered=TRUE)) +
   geom_violin() + 
   labs(title="E.", y="ROC AUC") +
   theme(axis.text.x=element_blank(),
@@ -97,7 +97,7 @@ select_scores <- select_scores[, !(names(select_scores) %in% "X")]
 select_scores_df <- melt(select_scores)
 colnames(select_scores_df) <- c("Lab", "ROC_AUC")
 
-twoF = ggplot(select_scores_df, aes(x=Lab, y=ROC_AUC, color=Lab)) +
+twoF = ggplot(select_scores_df, aes(x=reorder(Lab, -ROC_AUC), y=ROC_AUC, color=Lab)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) + 
   labs(title="F.", y="ROC AUC", x="Labs") +
   theme(legend.position="none", 
