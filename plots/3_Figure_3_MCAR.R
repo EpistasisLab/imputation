@@ -356,37 +356,4 @@ dev.off()
 
 
 
-# MNAR
-mnar_scores <- read.csv('./output/imputation_scores/mnar.csv')
-print(dim(mnar_scores))
-mnar_scores[,'MSE'] <- sqrt(mnar_scores[,'MSE'])
 
-mice_methods <- c("MICE", "MICE_col_lambda_reg_001", "MICE_col_lambda_reg_01", "MICE_col_lambda_reg_1", "MICE_col_lambda_reg_10", "MICE_col_lambda_reg_25")
-mice_labels <- c("0.001", "0.01", "0.1", "1", "10", "25")
-
-mice_scores <- subset(mnar_scores, Method %in% mice_methods)
-mice_scores$Method <- factor(mice_scores$Method, levels=mice_methods)
-
-mice_col = ggplot(mice_scores, aes(x=Method, y=MSE)) +
-  geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
-  labs(title = "A. MICE ", y="RMSE", x="Rank") +
-  scale_x_discrete(labels=mice_labels) + 
-  theme_bw() +
-  theme(legend.position="none", 
-        axis.text.x = element_text(angle = 90, hjust = 1))
-
-
-mice_methods <- c("MICE_pmm", "MICE_pmm_lambda_reg_001", "MICE_pmm_lambda_reg_01", "MICE_pmm_lambda_reg_1", "MICE_pmm_lambda_reg_10", "MICE_pmm_lambda_reg_25")
-mice_labels <- c("0.001", "0.01", "0.1", "1", "10", "25")
-
-mice_scores <- subset(mnar_scores, Method %in% mice_methods)
-mice_scores$Method <- factor(mice_scores$Method, levels=mice_methods)
-
-mice_subset <- subset(mice_scores, Percent.Missing==0.1)
-mice_pmm = ggplot(mice_subset, aes(x=Method, y=MSE)) +
-  geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
-  labs(title = "A. 0.1", y="RMSE", x="Rank") +
-  scale_x_discrete(labels=mice_labels) + 
-  theme_bw() +
-  theme(legend.position="none", 
-        axis.text.x = element_text(angle = 90, hjust = 1))
