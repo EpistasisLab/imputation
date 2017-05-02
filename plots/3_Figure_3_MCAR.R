@@ -2,8 +2,8 @@ library(reshape2)
 library(ggplot2)
 library(gridExtra)
 
-#setwd('/home/brett/code/imputation/')
-setwd('/Users/brett/code/imputation/')
+setwd('/home/brett/code/imputation/')
+#setwd('/Users/brett/code/imputation/')
 
 # MCAR
 mcar_scores <- read.csv('./output/imputation_scores/mcar.csv')
@@ -19,11 +19,15 @@ knn_labels <- c('1', '3', '9', '15', '30', '81', '243', '751', '2000', '6000')
 knn_scores <- subset(mcar_scores, Method %in% knn_methods)
 knn_scores$Method <- factor(knn_scores$Method, levels=knn_methods)
 
+min_score = min(mcar_scores['MSE'])
+max_score = max(mcar_scores['MSE'])
+
 mcar_subset <- subset(knn_scores, Percent.Missing==0.1)
 knn1 = ggplot(mcar_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "A. 0.1", y="RMSE", x="Imputation Method") +
   scale_x_discrete(labels=knn_labels) + 
+  scale_y_continuous(limits=c(min_score, max_score)) +
   theme_bw() +
   theme(legend.position="none",
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -33,6 +37,7 @@ knn2 = ggplot(mcar_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "B. 0.2", y="RMSE", x="Imputation Method") +
   scale_x_discrete(labels=knn_labels) + 
+  scale_y_continuous(limits=c(min_score, max_score)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -42,6 +47,7 @@ knn3 = ggplot(mcar_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "C. 0.3", y="RMSE", x="Imputation Method") +
   scale_x_discrete(labels=knn_labels) + 
+  scale_y_continuous(limits=c(min_score, max_score)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -58,8 +64,9 @@ knn4 = ggplot(mcar_subset, aes(x=Method, y=MSE)) +
 mcar_subset <- subset(knn_scores, Percent.Missing==0.5)
 knn5 = ggplot(mcar_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
-  labs(title = "E. 0.5", y="RMSE", x="Imputation Method") +
+  labs(title = "E. 0.5", y="RMSE", x="K neighbors") +
   scale_x_discrete(labels=knn_labels) + 
+  scale_y_continuous(limits=c(min_score, max_score)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -83,6 +90,7 @@ svd1 = ggplot(svd_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "A. 0.1", y="RMSE", x="Rank") +
   scale_x_discrete(labels=svd_labels) + 
+  scale_y_continuous(limits=c(min_score, max_score)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -92,6 +100,7 @@ svd2 = ggplot(svd_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "B. 0.2", y="RMSE", x="Rank") +
   scale_x_discrete(labels=svd_labels) + 
+  scale_y_continuous(limits=c(min_score, max_score)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -101,6 +110,7 @@ svd3 = ggplot(svd_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "C. 0.3", y="RMSE", x="Rank") +
   scale_x_discrete(labels=svd_labels) + 
+  scale_y_continuous(limits=c(min_score, max_score)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -110,6 +120,7 @@ svd4 = ggplot(svd_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "A. 0.1", y="RMSE", x="Rank") +
   scale_x_discrete(labels=svd_labels) + 
+  scale_y_continuous(limits=c(min_score, max_score)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -119,6 +130,7 @@ svd5 = ggplot(svd_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "A. 0.1", y="RMSE", x="Rank") +
   scale_x_discrete(labels=svd_labels) + 
+  scale_y_continuous(limits=c(min_score, max_score)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -139,6 +151,7 @@ si1 = ggplot(si_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "A. 0.1", y="RMSE", x="Rank") +
   scale_x_discrete(labels=si_labels) + 
+  scale_y_continuous(limits=c(min_score, max_score)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -148,6 +161,7 @@ si2 = ggplot(si_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "B. 0.2", y="RMSE", x="Rank") +
   scale_x_discrete(labels=si_labels) + 
+  scale_y_continuous(limits=c(min_score, max_score)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -157,6 +171,7 @@ si3 = ggplot(si_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "C. 0.3", y="RMSE", x="Rank") +
   scale_x_discrete(labels=si_labels) + 
+  scale_y_continuous(limits=c(min_score, max_score)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -166,6 +181,7 @@ si4 = ggplot(si_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "D. 0.4", y="RMSE", x="Rank") +
   scale_x_discrete(labels=si_labels) + 
+  scale_y_continuous(limits=c(min_score, max_score)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -175,6 +191,7 @@ si5 = ggplot(si_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "E. 0.5", y="RMSE", x="Rank") +
   scale_x_discrete(labels=si_labels) + 
+  scale_y_continuous(limits=c(min_score, max_score)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -184,7 +201,8 @@ print(grid.arrange(top="SoftImpute MCAR Spike-in",
                    arrangeGrob(si1, si2, si3, si4, si5, nrow=2, ncol=3), nrow=1, ncol=1))
 dev.off()
 
-mice_methods <- c("MICE", "MICE_col_lambda_reg_001", "MICE_col_lambda_reg_01", "MICE_col_lambda_reg_1", "MICE_col_lambda_reg_10", "MICE_col_lambda_reg_25")
+mice_methods <- c("MICE", "mice_col_lambda_reg_001", "mice_col_lambda_reg_01", "mice_col_lambda_reg_1",
+                  "mice_col_lambda_reg_10", "mice_col_lambda_reg_25")
 mice_labels <- c("0.001", "0.01", "0.1", "1", "10", "25")
 
 mice_scores <- subset(mcar_scores, Method %in% mice_methods)
@@ -195,6 +213,7 @@ mice1 = ggplot(mice_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "A. 0.1", y="RMSE", x="Lambda") +
   scale_x_discrete(labels=mice_labels) + 
+  scale_y_continuous(limits=c(min_score, max_score)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -204,6 +223,7 @@ mice2 = ggplot(mice_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "B. 0.2", y="RMSE", x="Lambda") +
   scale_x_discrete(labels=mice_labels) + 
+  scale_y_continuous(limits=c(min_score, max_score)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -213,6 +233,7 @@ mice3 = ggplot(mice_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "C. 0.3", y="RMSE", x="Lambda") +
   scale_x_discrete(labels=mice_labels) + 
+  scale_y_continuous(limits=c(min_score, max_score)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -222,6 +243,7 @@ mice4 = ggplot(mice_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "D. 0.4", y="RMSE", x="Lambda") +
   scale_x_discrete(labels=mice_labels) + 
+  scale_y_continuous(limits=c(min_score, max_score)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -231,6 +253,7 @@ mice5 = ggplot(mice_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "E. 0.5", y="RMSE", x="Lambda") +
   scale_x_discrete(labels=mice_labels) + 
+  scale_y_continuous(limits=c(min_score, max_score)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -240,8 +263,8 @@ print(grid.arrange(top="MICE Posterior Prediction MCAR Spike-in",
                    arrangeGrob(mice1, mice2, mice3, mice4, mice5, nrow=2, ncol=3), nrow=1, ncol=1))
 dev.off()
 
-mice_methods <- c("mice_pmm_X", "mice_pmm_lambda_reg_01", "mice_pmm_lambda_reg_1", "MICE_pmm_lambda_reg_10",
-                  "mice_pmm_lambda_reg_25")
+mice_methods <- c("mice_pmm_X", "mice_pmm_lambda_reg_001", "mice_pmm_lambda_reg_01", "mice_pmm_lambda_reg_1",
+                  "mice_pmm_lambda_reg_10", "mice_pmm_lambda_reg_25")
 mice_labels <- c("0.001", "0.01", "0.1", "1", "10", "25")
 
 mice_scores <- subset(mcar_scores, Method %in% mice_methods)
@@ -252,6 +275,7 @@ mice1 = ggplot(mice_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "A. 0.1", y="RMSE", x="Lambda") +
   scale_x_discrete(labels=mice_labels) + 
+  scale_y_continuous(limits=c(min_score, max_score)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -261,6 +285,7 @@ mice2 = ggplot(mice_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "B. 0.2", y="RMSE", x="Lambda") +
   scale_x_discrete(labels=mice_labels) + 
+  scale_y_continuous(limits=c(min_score, max_score)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -270,6 +295,7 @@ mice3 = ggplot(mice_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "C. 0.3", y="RMSE", x="Lambda") +
   scale_x_discrete(labels=mice_labels) + 
+  scale_y_continuous(limits=c(min_score, max_score)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -288,6 +314,7 @@ mice5 = ggplot(mice_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "E. 0.5", y="RMSE", x="Lambda") +
   scale_x_discrete(labels=mice_labels) + 
+  scale_y_continuous(limits=c(min_score, max_score)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -309,6 +336,7 @@ mice1 = ggplot(mice_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "A. 0.1", y="RMSE", x="Method") +
   scale_x_discrete(labels=mice_r_labels) + 
+  scale_y_continuous(limits=c(min_score, max_score)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -318,6 +346,7 @@ mice2 = ggplot(mice_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "B. 0.2", y="RMSE", x="Method") +
   scale_x_discrete(labels=mice_r_labels) + 
+  scale_y_continuous(limits=c(min_score, max_score)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -327,6 +356,7 @@ mice3 = ggplot(mice_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "C. 0.3", y="RMSE", x="Method") +
   scale_x_discrete(labels=mice_r_labels) + 
+  scale_y_continuous(limits=c(min_score, max_score)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -336,6 +366,7 @@ mice4 = ggplot(mice_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "D. 0.4", y="RMSE", x="Method") +
   scale_x_discrete(labels=mice_r_labels) + 
+  scale_y_continuous(limits=c(min_score, max_score)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -344,7 +375,8 @@ mice_subset <- subset(mice_scores, Percent.Missing==0.5)
 mice5 = ggplot(mice_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "E. 0.5", y="RMSE", x="Method") +
-  scale_x_discrete(labels=mice_r_labels) + 
+  scale_x_discrete(labels=mice_r_labels) +
+  scale_y_continuous(limits=c(min_score, max_score)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
