@@ -1,7 +1,6 @@
 # mar
 mar_scores <- read.csv('./output/imputation_scores/mar.csv')
 print(dim(mar_scores))
-mar_scores[,'MSE'] <- sqrt(mar_scores[,'MSE'])
 
 min_score = min(mnar_scores['MSE'])
 max_score = max(mnar_scores['MSE'])
@@ -21,7 +20,7 @@ knn1 = ggplot(mar_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "A. Quartile 1", y="RMSE", x="K-neighbors") +
   scale_x_discrete(labels=knn_labels) + 
-  scale_y_continuous(limits=c(min_score, max_score)) +
+  scale_y_continuous(limits=c(min_score, 2)) +
   theme_bw() +
   theme(legend.position="none",
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -31,7 +30,7 @@ knn2 = ggplot(mar_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "B. Quartile 2", y="RMSE", x="K-neighbors") +
   scale_x_discrete(labels=knn_labels) + 
-  scale_y_continuous(limits=c(min_score, max_score)) +
+  scale_y_continuous(limits=c(min_score, 2)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -41,7 +40,7 @@ knn3 = ggplot(mar_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "C. Quartile 3", y="RMSE", x="K-neighbors") +
   scale_x_discrete(labels=knn_labels) + 
-  scale_y_continuous(limits=c(min_score, max_score)) +
+  scale_y_continuous(limits=c(min_score, 2)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -51,7 +50,7 @@ knn4 = ggplot(mar_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "D. Quartile 4", y="RMSE", x="K-neighbors") +
   scale_x_discrete(labels=knn_labels) + 
-  scale_y_continuous(limits=c(min_score, max_score)) +
+  scale_y_continuous(limits=c(min_score, 2)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -126,7 +125,7 @@ si1 = ggplot(si_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "A. Quartile 1", y="RMSE", x="Rank") +
   scale_x_discrete(labels=si_labels) + 
-  scale_y_continuous(limits=c(min_score, max_score)) +
+  scale_y_continuous(limits=c(min_score, 2)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -136,7 +135,7 @@ si2 = ggplot(si_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "B. Quartile 2", y="RMSE", x="Rank") +
   scale_x_discrete(labels=si_labels) + 
-  scale_y_continuous(limits=c(min_score, max_score)) +
+  scale_y_continuous(limits=c(min_score, 2)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -146,7 +145,7 @@ si3 = ggplot(si_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "C. Quartile 3", y="RMSE", x="Rank") +
   scale_x_discrete(labels=si_labels) + 
-  scale_y_continuous(limits=c(min_score, max_score)) +
+  scale_y_continuous(limits=c(min_score, 2)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -156,7 +155,7 @@ si4 = ggplot(si_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "D. Quartile 4", y="RMSE", x="Rank") +
   scale_x_discrete(labels=si_labels) + 
-  scale_y_continuous(limits=c(min_score, max_score)) +
+  scale_y_continuous(limits=c(min_score, 2)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -178,7 +177,7 @@ mice1 = ggplot(mice_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "A. Quartile 1", y="RMSE", x="Lambda") +
   scale_x_discrete(labels=mice_labels) + 
-  scale_y_continuous(limits=c(min_score, max_score)) +
+  scale_y_continuous(limits=c(min_score, 2)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -188,7 +187,7 @@ mice2 = ggplot(mice_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "B. Quartile 2", y="RMSE", x="Lambda") +
   scale_x_discrete(labels=mice_labels) + 
-  scale_y_continuous(limits=c(min_score, max_score)) +
+  scale_y_continuous(limits=c(min_score, 2)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -198,7 +197,7 @@ mice3 = ggplot(mice_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "C. Quartile 3", y="RMSE", x="Lambda") +
   scale_x_discrete(labels=mice_labels) + 
-  scale_y_continuous(limits=c(min_score, max_score)) +
+  scale_y_continuous(limits=c(min_score, 2)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -208,7 +207,7 @@ mice4 = ggplot(mice_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "D. Quartile 4", y="RMSE", x="Lambda") +
   scale_x_discrete(labels=mice_labels) + 
-  scale_y_continuous(limits=c(min_score, max_score)) +
+  scale_y_continuous(limits=c(min_score, 2)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -230,7 +229,7 @@ mice1 = ggplot(mice_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "A. Quartile 1", y="RMSE", x="Lambda") +
   scale_x_discrete(labels=mice_labels) + 
-  scale_y_continuous(limits=c(min_score, max_score)) +
+  scale_y_continuous(limits=c(min_score, 2)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -240,7 +239,7 @@ mice2 = ggplot(mice_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "B. Quartile 2", y="RMSE", x="Lambda") +
   scale_x_discrete(labels=mice_labels) + 
-  scale_y_continuous(limits=c(min_score, max_score)) +
+  scale_y_continuous(limits=c(min_score, 2)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -250,7 +249,7 @@ mice3 = ggplot(mice_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "C. Quartile 3", y="RMSE", x="Lambda") +
   scale_x_discrete(labels=mice_labels) + 
-  scale_y_continuous(limits=c(min_score, max_score)) +
+  scale_y_continuous(limits=c(min_score, 2)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -260,7 +259,7 @@ mice4 = ggplot(mice_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "D. Quartile 4", y="RMSE", x="Lambda") +
   scale_x_discrete(labels=mice_labels) + 
-  scale_y_continuous(limits=c(min_score, max_score)) +
+  scale_y_continuous(limits=c(min_score, 2)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -282,7 +281,7 @@ mice1 = ggplot(mice_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "A. Quartile 1", y="RMSE", x="Method") +
   scale_x_discrete(labels=mice_r_labels) + 
-  scale_y_continuous(limits=c(min_score, max_score)) +
+  scale_y_continuous(limits=c(min_score, 2)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -292,7 +291,7 @@ mice2 = ggplot(mice_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "B. Quartile 2", y="RMSE", x="Method") +
   scale_x_discrete(labels=mice_r_labels) + 
-  scale_y_continuous(limits=c(min_score, max_score)) +
+  scale_y_continuous(limits=c(min_score, 2)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -302,7 +301,7 @@ mice3 = ggplot(mice_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "C. Quartile 3", y="RMSE", x="Method") +
   scale_x_discrete(labels=mice_r_labels) + 
-  scale_y_continuous(limits=c(min_score, max_score)) +
+  scale_y_continuous(limits=c(min_score, 2)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -312,7 +311,7 @@ mice4 = ggplot(mice_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "D. Quartile 4", y="RMSE", x="Method") +
   scale_x_discrete(labels=mice_r_labels) + 
-  scale_y_continuous(limits=c(min_score, max_score)) +
+  scale_y_continuous(limits=c(min_score, 2)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))

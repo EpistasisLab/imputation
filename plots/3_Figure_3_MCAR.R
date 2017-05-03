@@ -2,8 +2,8 @@ library(reshape2)
 library(ggplot2)
 library(gridExtra)
 
-setwd('/home/brett/code/imputation/')
-#setwd('/Users/brett/code/imputation/')
+#setwd('/home/brett/code/imputation/')
+setwd('/Users/brett/code/imputation/')
 
 # MCAR
 mcar_scores <- read.csv('./output/imputation_scores/mcar.csv')

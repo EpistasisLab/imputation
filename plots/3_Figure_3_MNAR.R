@@ -1,7 +1,6 @@
 # MNAR
 mnar_scores <- read.csv('./output/imputation_scores/mnar.csv')
 print(dim(mnar_scores))
-mnar_scores[,'MSE'] <- sqrt(mnar_scores[,'MSE'])
 
 min_score = min(mnar_scores['MSE'])
 max_score = max(mnar_scores['MSE'])
