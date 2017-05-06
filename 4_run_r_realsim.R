@@ -8,8 +8,9 @@ print(args[2])
 print(args[3])
 file_name = paste('./data/spikeincsv/', args[1], '/', args[2], '.csv', sep='')
 #file_name = paste('./data/spikeincsv/MATCH/part_1.csv')
-X_missing = read.csv(file_name, header=TRUE)[0:10000,3:32]
+X_missing = read.csv(file_name, header=TRUE)[0:10000,3:33]
 print(dim(X_missing))
+print(head(X_missing))
 set.seed(23515)
 
 tic<-Sys.time()
@@ -23,13 +24,13 @@ ini$predictorMatrix[-1,-1]<-predMat
 
 eval_list<-list()
 real_file = paste('./data/spikeincsv/', args[2], '.csv', sep='')
-X = read.csv(real_file, header=TRUE)[0:10000,3:32]
+X = read.csv(real_file, header=TRUE)[0:10000,3:33]
 X.df <- data.frame(matrix(unlist(X)))
 
 for(i in 1:length(impMethod)){
   print(impMethod[i])
   
-  imp <- mice(X_missing, visitSequence = "monotone", predictorMatrix = ini$predictorMatrix, ridge=.3,
+  imp <- mice(X_missing, visitSequence = "monotone", predictorMatrix = ini$predictorMatrix, ridge=0.001,
               m=1, method = impMethod[i], maxit = 100)
   imputed_matrix <- complete(imp, 1)
   print(dim(imputed_matrix))
