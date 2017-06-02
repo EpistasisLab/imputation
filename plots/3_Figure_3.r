@@ -24,7 +24,7 @@ plot1 = ggplot(mcar_subset, aes(x=Method, y=MSE, color=Method)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "A. MCAR", y="RMSE", x="Method") +
   scale_x_discrete(labels=labels) + 
-  scale_y_continuous(limits=c(min_score, max_score)) +
+  scale_y_continuous(limits=c(0, 2)) +
   theme_bw() +
   theme(legend.position="none",
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -41,7 +41,7 @@ mar_plot1 = ggplot(mar_subset, aes(x=Method, y=MSE, color=Method)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "B. MAR", y="RMSE", x="Method") +
   scale_x_discrete(labels=labels) + 
-  scale_y_continuous(limits=c(min_score, max_score)) +
+  scale_y_continuous(limits=c(0, 2)) +
   theme_bw() +
   theme(legend.position="none",
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -58,7 +58,7 @@ mnar_plot1 = ggplot(mnar_subset, aes(x=Method, y=MSE, color=Method)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "C. MNAR", y="RMSE", x="Method") +
   scale_x_discrete(labels=labels) + 
-  scale_y_continuous(limits=c(min_score, max_score)) +
+  scale_y_continuous(limits=c(0, 2)) +
   theme_bw() +
   theme(legend.position="none",
         axis.text.x = element_text(angle = 90, hjust = 1))

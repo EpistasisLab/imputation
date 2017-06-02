@@ -57,6 +57,7 @@ knn4 = ggplot(mcar_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "D. 0.4", y="RMSE", x="Imputation Method") +
   scale_x_discrete(labels=knn_labels) + 
+  scale_y_continuous(limits=c(min_score, max_score)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
@@ -118,7 +119,7 @@ svd3 = ggplot(svd_subset, aes(x=Method, y=MSE)) +
 svd_subset <- subset(svd_scores, Percent.Missing==0.4)
 svd4 = ggplot(svd_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
-  labs(title = "A. 0.1", y="RMSE", x="Rank") +
+  labs(title = "D. 0.4", y="RMSE", x="Rank") +
   scale_x_discrete(labels=svd_labels) + 
   scale_y_continuous(limits=c(min_score, max_score)) +
   theme_bw() +
@@ -128,7 +129,7 @@ svd4 = ggplot(svd_subset, aes(x=Method, y=MSE)) +
 svd_subset <- subset(svd_scores, Percent.Missing==0.5)
 svd5 = ggplot(svd_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
-  labs(title = "A. 0.1", y="RMSE", x="Rank") +
+  labs(title = "E. 0.5", y="RMSE", x="Rank") +
   scale_x_discrete(labels=svd_labels) + 
   scale_y_continuous(limits=c(min_score, max_score)) +
   theme_bw() +
@@ -305,6 +306,7 @@ mice4 = ggplot(mice_subset, aes(x=Method, y=MSE)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   labs(title = "D. 0.4", y="RMSE", x="Lambda") +
   scale_x_discrete(labels=mice_labels) + 
+  scale_y_continuous(limits=c(min_score, max_score)) +
   theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
