@@ -2,8 +2,8 @@ library(reshape2)
 library(ggplot2)
 library(gridExtra)
 
-setwd('/home/brett/code/imputation/')
-#setwd('/Users/brett/code/imputation/')
+#setwd('/home/brett/code/imputation/')
+setwd('/Users/brett/code/imputation/')
 
 # MCAR
 mcar_scores <- read.csv('./output/imputation_scores/mcar.csv')
@@ -64,7 +64,7 @@ knn5 = ggplot(mcar_subset, aes(x=Method, y=MSE)) +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
 
-png("./plots/supp_knn.png", width = 7.5, height = 5, res = 300, units = "in")
+png("./plots/supp_mcar_knn.png", width = 7.5, height = 5, res = 300, units = "in")
 print(grid.arrange(top="KNN MCAR Spike-in",
                    arrangeGrob(knn1, knn2, knn3, knn4, knn5, nrow=2, ncol=3), nrow=1, ncol=1))
 dev.off()
@@ -123,7 +123,7 @@ svd5 = ggplot(svd_subset, aes(x=Method, y=MSE)) +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
 
-png("./plots/supp_svd.png", width = 7.5, height = 5, res = 300, units = "in")
+png("./plots/supp_mcar_svd.png", width = 7.5, height = 5, res = 300, units = "in")
 print(grid.arrange(top="SVD MCAR Spike-in",
                    arrangeGrob(svd1, svd2, svd3, svd4, svd5, nrow=2, ncol=3), nrow=1, ncol=1))
 dev.off()
@@ -179,7 +179,7 @@ si5 = ggplot(si_subset, aes(x=Method, y=MSE)) +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
 
-png("./plots/supp_si.png", width = 7.5, height = 5, res = 300, units = "in")
+png("./plots/supp_mcar_si.png", width = 7.5, height = 5, res = 300, units = "in")
 print(grid.arrange(top="SoftImpute MCAR Spike-in",
                    arrangeGrob(si1, si2, si3, si4, si5, nrow=2, ncol=3), nrow=1, ncol=1))
 dev.off()
@@ -235,12 +235,13 @@ mice5 = ggplot(mice_subset, aes(x=Method, y=MSE)) +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
 
-png("./plots/supp_mice_col.png", width = 7.5, height = 5, res = 300, units = "in")
+png("./plots/supp_mcar_mice_col.png", width = 7.5, height = 5, res = 300, units = "in")
 print(grid.arrange(top="MICE Posterior Prediction MCAR Spike-in",
                    arrangeGrob(mice1, mice2, mice3, mice4, mice5, nrow=2, ncol=3), nrow=1, ncol=1))
 dev.off()
 
-mice_methods <- c("MICE_pmm", "MICE_pmm_lambda_reg_001", "MICE_pmm_lambda_reg_01", "MICE_pmm_lambda_reg_1", "MICE_pmm_lambda_reg_10", "MICE_pmm_lambda_reg_25")
+mice_methods <- c("mice_pmm_X", "mice_pmm_lambda_reg_01", "mice_pmm_lambda_reg_1", "MICE_pmm_lambda_reg_10",
+                  "mice_pmm_lambda_reg_25")
 mice_labels <- c("0.001", "0.01", "0.1", "1", "10", "25")
 
 mice_scores <- subset(mcar_scores, Method %in% mice_methods)
@@ -291,7 +292,7 @@ mice5 = ggplot(mice_subset, aes(x=Method, y=MSE)) +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
 
-png("./plots/supp_mice_pmm.png", width = 7.5, height = 5, res = 300, units = "in")
+png("./plots/supp_mcar_mice_pmm.png", width = 7.5, height = 5, res = 300, units = "in")
 print(grid.arrange(top="MICE Probabilistic Moment Matching MCAR Spike-in",
                    arrangeGrob(mice1, mice2, mice3, mice4, mice5, nrow=2, ncol=3), nrow=1, ncol=1))
 dev.off()
@@ -348,7 +349,7 @@ mice5 = ggplot(mice_subset, aes(x=Method, y=MSE)) +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
 
-png("./plots/supp_mice_r.png", width = 7.5, height = 5, res = 300, units = "in")
+png("./plots/supp_mcar_mice_r.png", width = 7.5, height = 5, res = 300, units = "in")
 print(grid.arrange(top="MICE R Package MCAR Spike-in",
                    arrangeGrob(mice1, mice2, mice3, mice4, mice5, nrow=2, ncol=3), nrow=1, ncol=1))
 dev.off()
