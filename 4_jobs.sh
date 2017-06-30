@@ -1,0 +1,10 @@
+python 4_run_python_realsim.py --folder MATCH --name part_1.csv --run_all 1 --save_imputed 1
+python 4_run_python_realsim.py --folder MATCH --name part_2.csv --run_all 1 --save_imputed 1
+python 4_run_python_realsim.py --folder MATCH --name part_3.csv --run_all 1 --save_imputed 1
+python 4_run_python_realsim.py --folder MATCH --name part_4.csv --run_all 1 --save_imputed 1
+python 4_run_python_realsim.py --folder MATCH --name part_5.csv --run_all 1 --save_imputed 1
+python 4_run_python_realsim.py --folder MATCH --name part_6.csv --run_all 1 --save_imputed 1
+python 4_run_python_realsim.py --folder MATCH --name part_7.csv --run_all 1 --save_imputed 1
+python 4_run_python_realsim.py --folder MATCH --name part_8.csv --run_all 1 --save_imputed 1
+python 4_run_python_realsim.py --folder MATCH --name part_9.csv --run_all 1 --save_imputed 1
+python 4_run_python_realsim.py --folder MATCH --name part_10.csv --run_all 1 --save_imputed 1 
