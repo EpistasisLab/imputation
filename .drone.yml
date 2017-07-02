@@ -28,7 +28,7 @@ pipeline:
 
       - git fetch
       - git branch --set-upstream-to=origin/master master
-      - git pull -s recursive -X theirs
+      - git pull -s recursive -X ours
       - git push
 
 branches: develop
