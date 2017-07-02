@@ -1,30 +1,31 @@
-# Package to Evaluate and Compare Imputation Techniques:
+# Characterizing and Managing Missing Structured Data in Electronic Health Records:
 
-This package takes in a matrix, spikes-in missing data, imputes the missing values and evaluates the score.
+Brett K. Beaulieu-Jones<sup>1,2</sup>, Daniel Lavage<sup>3</sup>, John Snyder<sup>3</sup>, Jason H. Moore<sup>2</sup>, Sarah A Pendergrass<sup>3</sup>, Christopher R. Bauer<sup>3,*</sup>
 
-Uses [fancyimpute](https://github.com/hammerlab/fancyimpute) and [scikit-learn](http://scikit-learn.org/stable/) for imputation methods.
+<sup>1</sup> Genomics and Computational Biology Graduate Group, Perelman School of Medicine, University of Pennsylvania, Philadelphia, Pennsylvania, USA.<sup>2</sup> Institute for Biomedical Informatics, University of Pennsylvania, Philadelphia, PA 19104<sup>3</sup> Biomedical and Translational Informatics Institute, Geisinger Health System*To whom correspondence should be addressed: cbauer@geisinger.edu
 
-### Inputs:
-* Matrix X - Data
-* Spike-in method - Method to add missingness to data
-* Evaluation Method - Measures to evalute 
+Introduction
+--------
 
-### Use run.py to perform evaluations:
+Missing data is a challenge for all studies; however, this is especially true for electronic health record (EHR) based analyses.  Failure to appropriately consider missing data can lead to biased results.  Here, we are detailed procedures for when and how to conduct imputation of EHR data.  We demonstrate how the mechanism of missingness can be assessed, evaluate the performance of a variety of imputation methods, and describe some of the most frequent problems that can be encountered.  
 
-> python run.py --name run --mode evaluate --data example.pkl --spike\_in MCAR --missing\_rate 0.1 --trials 1 \-\-eval\_method mse
+We used three opensource libraries for comparison and evaluation:
 
-Arguments:
+1. [fancyimpute](https://github.com/hammerlab/fancyimpute)
 
-* --name - name to save run results
-* --data  - the filename of the data (from ./data/), this should be a pickled numpy array, where the first column are subject ids (@TODO this does not currently handle files with headers)
-* --spike_in - the class name to use for spiking (options - mcar @TODO others)
-* --missing_rate - list of floats between 0 and 1 (amount to spike in)
-* --trials - the number of trials to run for each 
-* --eval_methods - 
-	* mse - mean squared error
-	* ae - absolute error 
-	* mape - mean absolute percentage error
+2. [scikit-learn](http://scikit-learn.org/stable/)
+ 
+3. [Multivariate Imputation by Chained Equations - R](https://github.com/stefvanbuuren/mice)
 
-@TODO
-* Parameter Sweep
-* Better handle parameters as input to imputers 
+
+
+Feedback
+--------
+
+Please feel free to email us - (brettbe) at med.upenn.edu with any feedback or
+raise a github issue with any comments or questions.
+
+Acknowledgements
+----------------
+
+We thank Casey S. Greene (University of Pennsylvania) for his helpful discussions. Funding: This work was supported by the Commonwealth Universal Research Enhancement (CURE) Program grant from the Pennsylvania Department of Health. B.K.B.-J. and J.H.M. were also supported by  and by US National Institutes of Health grants AI116794 and LM010098 to J.H.M.. 
