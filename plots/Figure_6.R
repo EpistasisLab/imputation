@@ -44,6 +44,7 @@ r2v<-vector()
 x<-vector()
 y<-vector()
 
+print("Variability Table")
 for(i in levels(variabilityTable$method)){
   data.sub<-subset(variabilityTable, method==i)
   #params<-summary(lm(RMSEobs ~ RMSEimp, data.sub))
@@ -75,6 +76,7 @@ folders<-c("/data/10k2/", "/data/output/")
 methodsToCompare<-intersect(dir(folders[1]), dir(folders[2]))
 methodsSummaryStats<-data.frame(matrix(nrow=0,ncol = 5))
 
+print("Intersect input and different imputations")
 for(i in 1:length(methodsToCompare)){
   f1<-read.table(paste(folders[1], methodsToCompare[i], sep = ""), header = F, sep = ",")
   f2<-read.table(paste(folders[2], methodsToCompare[i], sep = ""), header = F, sep = ",")
