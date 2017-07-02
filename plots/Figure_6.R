@@ -146,6 +146,6 @@ p1<-ggplot(sub.results, aes(x=RMSEobs, y=RMSEimp, col=variable))+
 
 rsqs<-paste0("MD ==", sub.results$r2)
 
-png("./figures/figure_5.png", res = 300, width = 12, height = 7, units = "in")
+png("./figures/figure_6.png", res = 300, width = 12, height = 7, units = "in")
 p1+geom_text(aes(x=sub.results$x, y=sub.results$y, label=as.character(rsqs)), parse = TRUE, size=4, col="black")
 dev.off()
