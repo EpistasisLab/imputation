@@ -1,0 +1,34 @@
+workspace:
+  path: src/
+
+pipeline:
+  build_figures:
+    image: brettbj/ehr-imputation:latest
+    commands:
+      - ls /drone/src
+      - Rscript ./plots/Figure_2.R
+      - Rscript ./plots/Figure_3.R
+      - Rscript ./plots/Figure_4.R
+      - Rscript ./plots/Figure_4_supplements.R
+      - Rscript ./plots/Figure_5.R
+    volumes:
+      - /data/imputation:/data
+
+  push_to_github:
+    image: brettbj/ehr-imputation:latest
+    secrets: [ git_publish_key ]
+    commands:
+      - git config user.email "brettbj@gmail.com"
+      - git config user.name "Brett Beaulieu-Jones"
+      - git config --global push.default simple
+      - git remote set-url origin https://brettbj:$GIT_PUBLISH_KEY@github.com/epistasislab/imputation
+
+      - git add ./figures/*
+      - git commit -a -m "Commit from drone"
+
+      - git fetch
+      - git branch --set-upstream-to=origin/master master
+      - git pull -s recursive -X theirs
+      - git push
+
+branches: develop
