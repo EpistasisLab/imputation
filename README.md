@@ -2,7 +2,7 @@
 
 Brett K. Beaulieu-Jones<sup>1,2</sup>, Daniel Lavage<sup>3</sup>, John Snyder<sup>3</sup>, Jason H. Moore<sup>2</sup>, Sarah A Pendergrass<sup>3</sup>, Christopher R. Bauer<sup>3,*</sup>
 
-<sup>1</sup> Genomics and Computational Biology Graduate Group, Perelman School of Medicine, University of Pennsylvania, Philadelphia, Pennsylvania, USA.<sup>2</sup> Institute for Biomedical Informatics, University of Pennsylvania, Philadelphia, PA 19104<sup>3</sup> Biomedical and Translational Informatics Institute, Geisinger Health System*To whom correspondence should be addressed: cbauer@geisinger.edu
+<sup>1</sup> Genomics and Computational Biology Graduate Group, Perelman School of Medicine, University of Pennsylvania, Philadelphia, Pennsylvania, USA.<sup>2</sup> Institute for Biomedical Informatics, University of Pennsylvania, Philadelphia, PA 19104<sup>3</sup> Biomedical and Translational Informatics Institute, Geisinger Health System*To whom correspondence should be addressed: (cbauer) at geisinger.edu
 
 Introduction
 --------
