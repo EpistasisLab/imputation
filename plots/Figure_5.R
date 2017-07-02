@@ -33,7 +33,7 @@ by_var_subset$Loinc_Codes <-factor(by_var_subset$Loinc_Codes, levels=c("2345.7",
 print(dim(by_var_subset))
 plot = ggplot(by_var_subset, aes(x=Method, y=MSE, color=Loinc_Codes)) + 
   stat_summary(fun.y = function(y){(y)}, geom = "point") +
-  ggtitle("B. Root Mean Squared Error By Algorithm and Lab")+
+  ggtitle("Root Mean Squared Error By Algorithm and Lab")+
   geom_hline(yintercept = sqrt(2))+
   theme_bw() +
   labs(color = "Lab Test (by LOINC code)") +
