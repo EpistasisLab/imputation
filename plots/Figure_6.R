@@ -36,6 +36,7 @@ for(i in 1:length(impList)){
   }
 }
 
+print("Making Variability Table")
 colnames(variabilityTable)<-c("method", "variable", "m.iter", "RMSEobs", "RMSEimp")
 variabilityTable$method<-factor(variabilityTable$method, levels = c("norm",  "pmm", "sample", "rf", "norm.predict", "mean", "ri",  "norm.boot", "norm.nob"))
 variabilityTable<-variabilityTable[order(variabilityTable$method), ]
@@ -44,7 +45,7 @@ r2v<-vector()
 x<-vector()
 y<-vector()
 
-print("Variability Table")
+print("Made Variability Table")
 for(i in levels(variabilityTable$method)){
   data.sub<-subset(variabilityTable, method==i)
   #params<-summary(lm(RMSEobs ~ RMSEimp, data.sub))
