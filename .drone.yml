@@ -11,6 +11,7 @@ pipeline:
       - Rscript ./plots/Figure_4.R
       - Rscript ./plots/Figure_4_supplements.R
       - Rscript ./plots/Figure_5.R
+      - Rscript ./plots/Figure_6.R
     volumes:
       - /data/imputation:/data
 
