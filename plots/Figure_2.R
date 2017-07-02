@@ -231,6 +231,7 @@ pC = ggplot(scores_df, aes(x=reorder(Labs, -ROC_AUC), y=ROC_AUC, color=Labs)) +
   ggtitle("C.") +
   labs(y="ROC AUC", x="Labs") +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) + 
+  theme_bw() +
   theme(legend.position="none",
         axis.text.x=element_blank(),
         axis.ticks.x=element_blank(),
@@ -255,6 +256,7 @@ pD = ggplot(select_scores_df, aes(x=reorder(Lab, -ROC_AUC), y=ROC_AUC, color=Lab
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) + 
   ggtitle("D.") +
   labs(y="ROC AUC", x="Labs") +
+  theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1),
         text=element_text(size = 16)) + 
