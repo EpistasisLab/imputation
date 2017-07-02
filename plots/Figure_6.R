@@ -29,7 +29,7 @@ for(i in 1:length(impList)){
       imp.Comp<-impValues[[k]][,comp]
       RMSEobs<-sqrt(mean((imp.m-obs)^2))
       RMSEimp<-sqrt(mean((imp.m-imp.Comp)^2))
-      
+
       new.row<-cbind.data.frame(imp$method[1], names(impValues)[k], m.iter, RMSEobs, RMSEimp)
       variabilityTable<-rbind(variabilityTable, new.row)
     }
@@ -71,7 +71,7 @@ spike<-spikeInSetBoxCox[1:10000,-1]
 spikeLong<-melt(spike)
 missing.i<-which(is.na(spikeLong$value))
 
-folders<-c("~/Downloads/10k2/", "~/Downloads/output/")
+folders<-c("/data/10k2/", "/data/output/")
 methodsToCompare<-intersect(dir(folders[1]), dir(folders[2]))
 methodsSummaryStats<-data.frame(matrix(nrow=0,ncol = 5))
 
@@ -89,7 +89,7 @@ methodsSummaryStats$method<-gsub(pattern = "completeCasesBoxCox_", replacement =
 methodsSummaryStats$method<-factor(methodsSummaryStats$method)
 
 gd <- methodsSummaryStats %>%
-  group_by(variable, method) %>% 
+  group_by(variable, method) %>%
   summarise(
     x = sqrt(mean((imp1-original)^2)),
     y = sqrt(mean((imp1-imp2)^2))
@@ -146,11 +146,3 @@ rsqs<-paste0("MD ==", sub.results$r2)
 png("./figures/figure_5.png", res = 300, width = 12, height = 7, units = "in")
 p1+geom_text(aes(x=sub.results$x, y=sub.results$y, label=as.character(rsqs)), parse = TRUE, size=4, col="black")
 dev.off()
-
-
-
-
-
-
-
-

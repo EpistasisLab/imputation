@@ -7,6 +7,7 @@ RUN R -e "install.packages('gplots')"
 RUN R -e "install.packages('RColorBrewer')"
 RUN R -e "install.packages('gridExtra')"
 RUN R -e "install.packages('mgcv')"
+RUN R -e "install.packages('dplyr')"
 
 # Python for imputation
 RUN apt-get update && apt-get install -y \
@@ -21,3 +22,6 @@ RUN apt-get update && apt-get install -y \
 # cpu tensorflow - should get gpu if doing heavy lifting
 RUN pip install numpy pandas h5py sklearn
 RUN pip install tensorflow keras fancyimpute
+
+# R for imputation
+RUN R -e "install.packages('mice')"
