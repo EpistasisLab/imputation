@@ -149,7 +149,7 @@ colnames(scores) <- c("Lab", "ROC_AUC")
 
 p5<-ggplot(scores, aes(x=reorder(Lab, -ROC_AUC), y=ROC_AUC, color=Lab)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
-  ggtitle("C.") +
+  ggtitle("E.") +
   labs(y="ROC AUC", x="Labs") +
   theme_bw() +
   theme(legend.position="none",
@@ -170,8 +170,9 @@ print(dim(select_scores))
 
 p6<-ggplot(select_scores, aes(x=reorder(Lab, -ROC_AUC), y=ROC_AUC, color=Lab)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) + 
-  ggtitle("D.") +
+  ggtitle("F.") +
   labs(y="ROC AUC", x="Labs") +
+  theme_bw() +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1),
         text=element_text(size = 16)) + 
