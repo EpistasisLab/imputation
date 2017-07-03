@@ -64,6 +64,6 @@ supp_plot = ggplot(scores, aes(x=Method, y=MSE)) +
   theme(legend.position="none",
         axis.text.x = element_text(angle = 45, hjust = 1))
 
-png("./figures/Supplemental_Figure_23.png", width = 8, height = 5, res = 300, units = "in")
+png("./figures/Supplemental_Figure_21.png", width = 8, height = 5, res = 300, units = "in")
 print(grid.arrange(arrangeGrob(supp_plot), nrow=1, ncol=1))
 dev.off()
