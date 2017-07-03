@@ -668,7 +668,7 @@ mice4 = ggplot(mice_subset, aes(x=Method, y=MSE)) +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
 
-png("./figures/Supplemental_Figure_16.png", width = 7.5, height = 5, res = 300, units = "in")
+png("./figures/Supplemental_Figure_14.png", width = 7.5, height = 5, res = 300, units = "in")
 print(grid.arrange(top="MICE R Package MNAR Spike-in",
                    arrangeGrob(mice1, mice2, mice3, mice4, nrow=2, ncol=2), nrow=1, ncol=1))
 dev.off()
@@ -730,7 +730,7 @@ knn4 = ggplot(mar_subset, aes(x=Method, y=MSE)) +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
 
-png("./figures/Supplemental_Figure_17.png", width = 7.5, height = 5, res = 300, units = "in")
+png("./figures/Supplemental_Figure_15.png", width = 7.5, height = 5, res = 300, units = "in")
 print(grid.arrange(top="KNN MAR Spike-in",
                    arrangeGrob(knn1, knn2, knn3, knn4, nrow=2, ncol=2), nrow=1, ncol=1))
 dev.off()
@@ -784,7 +784,7 @@ svd4 = ggplot(svd_subset, aes(x=Method, y=MSE)) +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
 
-png("./figures/Supplemental_Figure_18.png", width = 7.5, height = 5, res = 300, units = "in")
+png("./figures/Supplemental_Figure_16.png", width = 7.5, height = 5, res = 300, units = "in")
 print(grid.arrange(top="SVD MAR Spike-in",
                    arrangeGrob(svd1, svd2, svd3, svd4, nrow=2, ncol=2), nrow=1, ncol=1))
 dev.off()
@@ -835,7 +835,7 @@ si4 = ggplot(si_subset, aes(x=Method, y=MSE)) +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
 
-png("./figures/Supplemental_Figure_19.png", width = 7.5, height = 5, res = 300, units = "in")
+png("./figures/Supplemental_Figure_17.png", width = 7.5, height = 5, res = 300, units = "in")
 print(grid.arrange(top="SoftImpute MAR Spike-in",
                    arrangeGrob(si1, si2, si3, si4, nrow=2, ncol=2), nrow=1, ncol=1))
 dev.off()
@@ -887,7 +887,7 @@ mice4 = ggplot(mice_subset, aes(x=Method, y=MSE)) +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
 
-png("./figures/Supplemental_Figure_20.png", width = 7.5, height = 5, res = 300, units = "in")
+png("./figures/Supplemental_Figure_18.png", width = 7.5, height = 5, res = 300, units = "in")
 print(grid.arrange(top="MICE Posterior Prediction MAR Spike-in",
                    arrangeGrob(mice1, mice2, mice3, mice4, nrow=2, ncol=2), nrow=1, ncol=1))
 dev.off()
@@ -939,7 +939,7 @@ mice4 = ggplot(mice_subset, aes(x=Method, y=MSE)) +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
 
-png("./figures/Supplemental_Figure_21.png", width = 7.5, height = 5, res = 300, units = "in")
+png("./figures/Supplemental_Figure_19.png", width = 7.5, height = 5, res = 300, units = "in")
 print(grid.arrange(top="MICE Probabilistic Moment Matching MAR Spike-in",
                    arrangeGrob(mice1, mice2, mice3, mice4, nrow=2, ncol=2), nrow=1, ncol=1))
 dev.off()
@@ -991,7 +991,7 @@ mice4 = ggplot(mice_subset, aes(x=Method, y=MSE)) +
   theme(legend.position="none", 
         axis.text.x = element_text(angle = 90, hjust = 1))
 
-png("./figures/Supplemental_Figure_22.png", width = 7.5, height = 5, res = 300, units = "in")
+png("./figures/Supplemental_Figure_20.png", width = 7.5, height = 5, res = 300, units = "in")
 print(grid.arrange(top="MICE R Package MAR Spike-in",
                    arrangeGrob(mice1, mice2, mice3, mice4, nrow=2, ncol=2), nrow=1, ncol=1))
 dev.off()
