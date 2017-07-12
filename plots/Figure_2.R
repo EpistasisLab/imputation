@@ -27,24 +27,22 @@ for(i in 1:ncol(ptTrimMedResDemWide)){
 colnames(completeCasesCounts)<-c("lab", "count")
 
 summaryMissing<-cbind.data.frame(completeCasesCounts$lab, 
-                                 completeCasesCounts$count/nrow(ptTrimMedResDemWide), 
-                                 missing.percent)
-colnames(summaryMissing)<-c("Rank", "Complete Cases", "Missing Values")
-#rownames(summaryMissing)<-NULL
-
-### Set colors for all panels
-#colPalette<-brewer.pal(3, "Accent")
+                                 missing.percent,
+                                 completeCasesCounts$count/nrow(ptTrimMedResDemWide))
+colnames(summaryMissing)<-c("Rank", "Missing Values", "Complete Cases")
 
 ### Make a plot with the percent missing data for each lab and the number of complete cases at each cutoff
-p1<-ggplot(melt(summaryMissing[5:75,], id.vars = "Rank"), aes(x=Rank-4, y=value*100, color=variable))+
+p1<-ggplot(melt(summaryMissing, id.vars = "Rank"), aes(x=Rank-4, y=value*100, color=variable))+
   geom_point(size=3)+
   geom_vline(xintercept=28.5)+
   #scale_color_manual("", values=colPalette)+
   ylab("Percent")+
+  xlab("Lab Tests")+
   ggtitle("A.")+
   theme_bw()+
   theme(legend.justification=c(1,.85), 
         legend.position=c(1,.85),
+        legend.title=element_blank(),
         axis.text.x=element_text(colour="black", size = 16),
         axis.text.y=element_text(colour="black", size = 16),
         text=element_text(size = 16))
@@ -60,7 +58,7 @@ is.incomplete<-function(x){
   }
 }
 incomplete.patients<-apply(top28, 1, is.incomplete)
-incomplete.patients<-factor(incomplete.patients, levels = c("Complete Cases", "All Patients"))
+incomplete.patients<-factor(incomplete.patients, levels = c("All Patients", "Complete Cases"))
 top28<-cbind.data.frame(top28, incomplete.patients)
 
 p2<-ggplot(top28, aes(x=medAge, fill=incomplete.patients))+
@@ -72,6 +70,7 @@ p2<-ggplot(top28, aes(x=medAge, fill=incomplete.patients))+
   theme_bw()+
   theme(legend.justification=c(1,1), 
         legend.position=c(1,1),
+        legend.title=element_blank(),
         axis.text.x=element_text(colour="black", size = 16),
         axis.text.y=element_text(colour="black", size = 16),
         text=element_text(size = 16))
@@ -144,16 +143,17 @@ panel_scores<-read.csv('/data/prediction_scores/all_panels.csv', header=TRUE)
 print(dim(panel_scores))
 colnames(panel_scores)<-all_lab_names 
 
-scores <- melt(panel_scores[, !names(panel_scores) %in% c("X")])
+scores <- melt(panel_scores)
 colnames(scores) <- c("Lab", "ROC_AUC")
+print(scores)
 
-p5<-ggplot(scores, aes(x=reorder(Lab, -ROC_AUC), y=ROC_AUC, color=Lab)) +
+p5<-ggplot(scores, aes(x=reorder(Lab, -ROC_AUC), y=ROC_AUC)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
   ggtitle("E.") +
   labs(y="ROC AUC", x="Labs") +
   theme_bw() +
   theme(legend.position="none",
-        axis.ticks.x=element_blank(),
+        #axis.ticks.x=element_blank(),
         axis.text.x=element_blank(),
         axis.text.y=element_text(colour="black", size = 16),
         text=element_text(size = 16)) + 
@@ -165,10 +165,12 @@ top_28_loinc <- c("718-7", "4544-3", "787-2", "786-4", "785-6", "6690-2", "789-8
                   "30239-8", "1975-2", "2885-2", "10466-1", "751-8", "2093-3", "2571-8", "2085-9", "13457-7",
                   "2965-2")
 
+print(dim(scores))
 select_scores<-scores[scores$Lab %in% top_28_loinc,]
 print(dim(select_scores))
+print(unique(select_scores$Lab))
 
-p6<-ggplot(select_scores, aes(x=reorder(Lab, -ROC_AUC), y=ROC_AUC, color=Lab)) +
+p6<-ggplot(select_scores, aes(x=reorder(Lab, -ROC_AUC), y=ROC_AUC)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) + 
   ggtitle("F.") +
   labs(y="ROC AUC", x="Labs") +
