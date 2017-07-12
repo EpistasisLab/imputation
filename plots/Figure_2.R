@@ -142,10 +142,8 @@ all_lab_names <- c("10330-9", "10334-1", "10466-1", "10501-5", "10535-3", "10886
 panel_scores<-read.csv('/data/prediction_scores/all_panels.csv', header=TRUE)
 print(dim(panel_scores))
 colnames(panel_scores)<-all_lab_names 
-
 scores <- melt(panel_scores)
 colnames(scores) <- c("Lab", "ROC_AUC")
-print(scores)
 
 p5<-ggplot(scores, aes(x=reorder(Lab, -ROC_AUC), y=ROC_AUC)) +
   geom_boxplot(outlier.colour="black", outlier.shape=1, outlier.size=1) +
